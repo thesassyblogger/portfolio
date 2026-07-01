@@ -79,6 +79,7 @@ export const PROJECTS = [
     desc: "A polished, responsive marketing website with clean layout, smooth interactions and a bold brand identity.",
     link: "https://thesassyblogger.github.io/Mango/",
     live: true,
+    image: "/projects/mango.jpg",
     hue: "#BF5537",
   },
   {
@@ -99,6 +100,7 @@ export const PROJECTS = [
     desc: "Real-time group chat with Socket.IO, deployed to Google Cloud App Engine with IAM, Artifact Registry and Cloud Build.",
     link: "https://github.com/thesassyblogger/webst",
     live: false,
+    image: "/projects/chat.jpg",
     hue: "#35594E",
   },
   {
@@ -109,6 +111,7 @@ export const PROJECTS = [
     desc: "A role-based task management engine with JWT auth and analytics that turn raw data into actionable business intelligence.",
     link: "https://github.com/thesassyblogger/Mern-Task-Manager",
     live: false,
+    image: "/projects/task.jpg",
     hue: "#4A5A7A",
   },
   {

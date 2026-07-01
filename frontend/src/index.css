@@ -35,6 +35,10 @@ code, .font-mono-accent { font-family: 'Space Mono', monospace; }
 
 ::selection { background: var(--accent); color: #fff; }
 
+/* custom cursor active */
+body.cursor-none, body.cursor-none * { cursor: none !important; }
+body.cursor-none input, body.cursor-none textarea { cursor: text !important; }
+
 ::-webkit-scrollbar { width: 9px; }
 ::-webkit-scrollbar-track { background: var(--bg); }
 ::-webkit-scrollbar-thumb { background: #cbc3b3; border-radius: 4px; }

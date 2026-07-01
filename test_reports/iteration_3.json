@@ -1,0 +1,30 @@
+{
+  "summary": "Iteration 3 end-to-end tested. Backend contact API: 7/7 pytest cases pass (POST 201 + persistence, GET list, 422 on invalid email/empty strings/missing fields, optional subject default). Frontend: preloader lifts (skippable with ?fast), hero + MANSI PATEL text visible, all 6 nav links (nav-home/about/skills/work/projects/contact) smooth-scroll and highlight. Constant Avatar with crossfade poses is visible across Home/About/Skills/Work/Projects/Contact (Wave pose visible on About). Custom cursor is fixed z-index with pointer-events:none and does NOT block clicks on desktop; absent on mobile. Projects: 6 cards render, auto-rotates, front-card click opens detail modal (Mango link https://thesassyblogger.github.io/Mango/ confirmed), close works, fullscreen toggle opens overlay AND locks body scroll (body.overflow=hidden). About: count-ups animate to 15+, 5+, 2; interests marquee + certifications chips render. Skills: 4 accordion groups, clicking skill-group-1 expands (89px -> 148px). Experience: exactly 2 items (Pqxel + University of Regina); no YMCA/Guac; hover expands item to 260px. Contact form: empty submit -> 'Please fill in your name, email and message.' error toast + no POST; valid submit -> 201, success toast 'Message sent!', fields cleared. Responsive: mobile 390 -> scrollWidth==clientWidth (0px overflow, previous iteration_2 bug FIXED); tablet 820 -> 0px overflow; mobile drawer opens via nav-mobile-toggle (button toggles between 'Menu'/'Close') and nav-mobile-{about|skills|work|projects|contact|home} scrolls correctly. Zero console errors, no runtime overlay. One bug found: Sunflower project card does NOT show an image (still shows letter 'S') even though /app/frontend/public/projects/sunflower.jpg exists on disk.",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {
+    "ui_bugs": [
+      {"component": "Projects card (Sunflower)", "issue": "Sunflower card renders the fallback letter 'S' instead of the screenshot image. The image file /app/frontend/public/projects/sunflower.jpg exists on disk, but the PROJECTS entry in /app/frontend/src/data/portfolio.js is missing the `image: '/projects/sunflower.jpg'` field. Card 1 hasImg=False confirmed in DOM. This violates the requirement: 'Cards for Mango/Sunflower/Chat/Task show an IMAGE (not a plain letter)'.", "selector": "[data-testid='project-card-1']", "priority": "MEDIUM"}
+    ],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": ["/app/backend/tests/test_contact_api.py", "/app/test_reports/pytest/pytest_results.xml"],
+  "action_items": [
+    "In /app/frontend/src/data/portfolio.js add `image: '/projects/sunflower.jpg'` to the Sunflower project object (the file already exists at /app/frontend/public/projects/sunflower.jpg). That single-line change will make the Sunflower card show the screenshot like Mango/Chat/Task."
+  ],
+  "critical_code_review_comments": [
+    "Projects.jsx: card `onClick={() => openCard(p)}` fires for any card that has `pointerEvents:auto` (front>0.2), so back-facing cards adjacent to the front can also open the modal. If the intent is truly 'front-only click', gate opening on `isFront` (eff<30 || eff>330).",
+    "Projects.jsx: auto-rotate rAF loop still runs regardless of section visibility. Consider gating with IntersectionObserver for a small perf win.",
+    "About.jsx CountUp: uses `useInView(ref, { once: true, margin: '-20%' })` — on mobile viewports this can trigger before the number is actually in view for small screens. Works fine here but worth revisiting margin value.",
+    "server.py: no rate limiting on POST /api/contact — bot spam risk. Consider a per-IP throttle for production.",
+    "server.py: `basicConfig` is invoked at import time which is fragile if uvicorn configures logging first — flagged in prior iterations still present."
+  ],
+  "updated_files": [],
+  "success_rate": {"backend": "100% (7/7)", "frontend": "~97% (all functional flows pass; 1 data-only bug: Sunflower image not wired in portfolio.js)"},
+  "test_credentials": "N/A — no auth.",
+  "seed_data_creation": "One TEST_-prefixed contact document inserted by the Playwright happy-path submission via /api/contact (name=TEST_UI_<ts>). Prior pytest also inserts 2 TEST_ documents each run. Easy to filter/remove from contact_messages collection.",
+  "retest_needed": false,
+  "should_main_agent_self_test": true,
+  "context_for_next_testing_agent": "All required data-testids in place. Preloader is skippable with ?fast. Mobile drawer uses `nav-mobile-{home|about|skills|work|projects|contact}` (NOT the desktop `nav-{item}`) — a common pitfall. The Avatar uses position:fixed so `offsetParent` checks return null; use getBoundingClientRect + visibility rather than offsetParent. Iteration_2's mobile 390px horizontal overflow is FIXED (verified 390==390). Backend regression: `pytest /app/backend/tests/test_contact_api.py -v`. If retesting Sunflower fix: `page.evaluate(\"() => !!document.querySelector('[data-testid=\\\"project-card-1\\\"] img')\")` should return true after fix.",
+  "rca of the issue": "Sunflower image not showing: In /app/frontend/src/data/portfolio.js (lines 86-94), the Sunflower project object omits the `image` field. Projects.jsx line 135 conditionally renders `<img src={p.image} />` when `p.image` is truthy, else falls back to `<span>{p.name.charAt(0)}</span>` — hence letter 'S'. Mango/Chat/Task all have `image: '/projects/...'` set; Sunflower does not. The screenshot file exists at /app/frontend/public/projects/sunflower.jpg (verified via `ls`). Fix: add one line `image: '/projects/sunflower.jpg',` inside the Sunflower entry."
+}

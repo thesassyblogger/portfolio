@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import "@/App.css";
 import { Toaster } from "sonner";
 import AmbientBackground from "@/components/AmbientBackground";
+import CustomCursor from "@/components/CustomCursor";
 import Preloader from "@/components/Preloader";
 import Avatar from "@/components/Avatar";
 import Navbar from "@/components/Navbar";
@@ -48,6 +49,7 @@ function App() {
 
   return (
     <div className="App grain relative min-h-screen">
+      <CustomCursor />
       {!skipPreload && <Preloader onDone={() => setLoaded(true)} />}
       <AmbientBackground />
       <Navbar active={active} />

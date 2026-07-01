@@ -131,9 +131,12 @@ export default function Projects() {
                   transform: isFront ? "scale(1.04)" : "scale(1)",
                 }}
               >
-                <div className="h-1/2 relative flex items-center justify-center" style={{ background: `linear-gradient(135deg, ${p.hue}, ${p.hue}bb)` }}>
-                  <span className="font-serif-display text-white/95 text-5xl leading-none">{p.name.charAt(0)}</span>
-                  <span className="absolute top-3 right-3 font-mono-accent text-[9px] tracking-widest uppercase text-white/90 bg-black/20 px-2 py-1 rounded">{p.live ? "Live" : "Code"}</span>
+                <div className="h-1/2 relative flex items-center justify-center overflow-hidden" style={{ background: `linear-gradient(135deg, ${p.hue}, ${p.hue}bb)` }}>
+                  {p.image ? (
+                    <img src={p.image} alt={p.name} draggable={false} className="absolute inset-0 w-full h-full object-cover object-top" />
+                  ) : (
+                    <span className="font-serif-display text-white/95 text-5xl leading-none">{p.name.charAt(0)}</span>
+                  )}
                 </div>
                 <div className="h-1/2 p-4 flex flex-col">
                   <p className="font-mono-accent text-[9px] tracking-[0.2em] uppercase text-[#6E685B]">{p.kind}</p>
@@ -207,9 +210,10 @@ export default function Projects() {
               onClick={(e) => e.stopPropagation()}
               className="relative w-full max-w-lg bg-[#F7F4ED] border border-[rgba(27,26,22,0.15)] rounded-2xl overflow-hidden"
             >
-              <div className="h-40 relative flex items-end p-6" style={{ background: `linear-gradient(135deg, ${selected.hue}, ${selected.hue}bb)` }}>
-                <span className="font-serif-display text-white text-3xl">{selected.name}</span>
-                <button onClick={() => setSelected(null)} data-testid="project-detail-close" className="absolute top-3 right-3 p-2 rounded-full bg-black/20 text-white hover:bg-black/40">
+              <div className="h-44 relative flex items-end p-6 overflow-hidden" style={{ background: `linear-gradient(135deg, ${selected.hue}, ${selected.hue}bb)` }}>
+                {selected.image && <img src={selected.image} alt={selected.name} className="absolute inset-0 w-full h-full object-cover object-top" />}
+                <span className="relative font-serif-display text-white text-3xl drop-shadow-[0_2px_8px_rgba(0,0,0,0.5)]">{selected.name}</span>
+                <button onClick={() => setSelected(null)} data-testid="project-detail-close" className="absolute top-3 right-3 p-2 rounded-full bg-black/30 text-white hover:bg-black/50 z-10">
                   <X className="w-4 h-4" />
                 </button>
               </div>

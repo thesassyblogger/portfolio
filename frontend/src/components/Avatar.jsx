@@ -1,21 +1,34 @@
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { AVATARS } from "../data/portfolio";
 
+// One consistent character; poses crossfade in place (no vanish/replace).
+// On Home she subtly tilts to follow the cursor.
 const STATES = {
   Home: { src: AVATARS.hero, side: "center", scale: 1, tag: "Hello, I'm Mansi" },
-  About: { src: AVATARS.wave, side: "left", scale: 0.96, tag: "A little about me" },
-  Skills: { src: AVATARS.coding, side: "right", scale: 0.98, tag: "Always building" },
-  Work: { src: AVATARS.present, side: "left", scale: 0.96, tag: "My journey" },
-  Contact: { src: AVATARS.wave, side: "right", scale: 0.96, tag: "Let's talk" },
+  About: { src: AVATARS.wave, side: "left", scale: 0.98, tag: "A little about me" },
+  Skills: { src: AVATARS.coding, side: "right", scale: 1.0, tag: "Building, always" },
+  Work: { src: AVATARS.present, side: "left", scale: 0.98, tag: "My journey" },
+  Projects: { src: AVATARS.present, side: "left", scale: 0.82, tag: "Take a look" },
+  Contact: { src: AVATARS.wave, side: "right", scale: 0.98, tag: "Let's talk" },
 };
 
 export default function Avatar({ active }) {
-  // Hide on Projects so the rotating gallery is the sole focus
-  const state = STATES[active];
-  const hidden = !state;
-  const side = state?.side || "center";
+  const state = STATES[active] || STATES.Home;
+  const side = state.side;
   const isCenter = side === "center";
+  const [tilt, setTilt] = useState({ rx: 0, ry: 0 });
+
+  useEffect(() => {
+    if (active !== "Home") { setTilt({ rx: 0, ry: 0 }); return; }
+    const onMove = (e) => {
+      const nx = e.clientX / window.innerWidth - 0.5;
+      const ny = e.clientY / window.innerHeight - 0.5;
+      setTilt({ ry: nx * 16, rx: -ny * 10 });
+    };
+    window.addEventListener("mousemove", onMove);
+    return () => window.removeEventListener("mousemove", onMove);
+  }, [active]);
 
   return (
     <div
@@ -23,47 +36,56 @@ export default function Avatar({ active }) {
       data-testid="3d-avatar-placeholder"
       style={{
         height: "80vh",
-        left: side === "right" ? "auto" : side === "center" ? "50%" : "3vw",
-        right: side === "right" ? "3vw" : "auto",
+        width: "40vw",
+        maxWidth: 520,
+        left: side === "right" ? "auto" : side === "center" ? "50%" : "2vw",
+        right: side === "right" ? "2vw" : "auto",
         transform: isCenter ? "translateX(-50%)" : "none",
-        opacity: hidden ? 0 : 1,
-        transition:
-          "left 1s cubic-bezier(0.22,1,0.36,1), right 1s cubic-bezier(0.22,1,0.36,1), opacity 0.6s ease",
+        transition: "left 1s cubic-bezier(0.22,1,0.36,1), right 1s cubic-bezier(0.22,1,0.36,1)",
+        perspective: 1200,
       }}
     >
-      <div className="relative h-full flex items-end">
-        <AnimatePresence mode="wait">
-          {!hidden && (
-            <motion.div
-              key={state.src}
-              initial={{ opacity: 0, y: 40, scale: state.scale * 0.92 }}
-              animate={{ opacity: 1, y: 0, scale: state.scale }}
-              exit={{ opacity: 0, y: -24, scale: state.scale * 0.94 }}
-              transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-              className="relative h-full animate-floaty"
-            >
-              <div
-                className="absolute left-1/2 bottom-6 -translate-x-1/2 w-[62%] h-6 rounded-full blur-xl -z-10"
-                style={{ background: "rgba(27,26,22,0.18)" }}
-              />
-              <img
+      {/* entrance */}
+      <motion.div
+        className="relative h-full w-full"
+        initial={{ opacity: 0, y: 100, scale: 0.9 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        transition={{ duration: 1.1, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
+      >
+        {/* float loop */}
+        <div className="relative h-full w-full animate-floaty">
+          {/* cursor tilt */}
+          <div
+            className="relative h-full w-full"
+            style={{
+              transform: `rotateX(${tilt.rx}deg) rotateY(${tilt.ry}deg) scale(${state.scale})`,
+              transformStyle: "preserve-3d",
+              transition: "transform 0.35s ease-out",
+              transformOrigin: "center bottom",
+            }}
+          >
+            <div className="absolute left-1/2 -translate-x-1/2 bottom-4 w-[55%] h-6 rounded-full blur-xl" style={{ background: "rgba(27,26,22,0.2)" }} />
+
+            <AnimatePresence mode="sync">
+              <motion.img
+                key={state.src}
                 src={state.src}
                 alt="Mansi avatar"
-                className="h-full w-auto object-contain drop-shadow-[0_24px_40px_rgba(27,26,22,0.18)] select-none"
                 draggable={false}
-              />
-              <motion.span
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                transition={{ delay: 0.35 }}
-                className="font-mono-accent absolute -top-1 left-1/2 -translate-x-1/2 whitespace-nowrap text-[10px] tracking-[0.2em] uppercase text-[#BF5537] bg-[#F7F4ED]/80 backdrop-blur px-3 py-1 rounded-full border border-[rgba(27,26,22,0.12)]"
-              >
-                {state.tag}
-              </motion.span>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </div>
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.7, ease: "easeInOut" }}
+                className="absolute bottom-0 left-1/2 h-full w-auto max-w-none -translate-x-1/2 object-contain select-none drop-shadow-[0_24px_40px_rgba(27,26,22,0.18)]"
+              />
+            </AnimatePresence>
+
+            <span className="font-mono-accent absolute -top-1 left-1/2 -translate-x-1/2 whitespace-nowrap text-[10px] tracking-[0.2em] uppercase text-[#BF5537] bg-[#F7F4ED]/80 backdrop-blur px-3 py-1 rounded-full border border-[rgba(27,26,22,0.12)]">
+              {state.tag}
+            </span>
+          </div>
+        </div>
+      </motion.div>
     </div>
   );
 }
