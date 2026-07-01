@@ -17,6 +17,23 @@ export default function Projects() {
   const moved = useRef(0);
   const angleRef = useRef(0);
   angleRef.current = angle;
+  const sectionRef = useRef(null);
+  const [inView, setInView] = useState(true);
+
+  // pause rotation when section is off-screen (perf)
+  useEffect(() => {
+    const el = sectionRef.current;
+    if (!el) return;
+    const io = new IntersectionObserver(([e]) => setInView(e.isIntersecting), { threshold: 0.05 });
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+
+  // lock page scroll while fullscreen overlay is open
+  useEffect(() => {
+    document.body.style.overflow = fs ? "hidden" : "";
+    return () => { document.body.style.overflow = ""; };
+  }, [fs]);
 
   // responsive sizing
   useEffect(() => {
@@ -39,14 +56,14 @@ export default function Projects() {
   useEffect(() => {
     let raf;
     const tick = () => {
-      if (!paused && !dragging.current && !selected) {
+      if (!paused && !dragging.current && !selected && (inView || fs)) {
         setAngle((a) => (a + 0.16) % 360);
       }
       raf = requestAnimationFrame(tick);
     };
     raf = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(raf);
-  }, [paused, selected]);
+  }, [paused, selected, inView, fs]);
 
   const onDown = (e) => {
     dragging.current = true;
@@ -144,7 +161,7 @@ export default function Projects() {
   );
 
   return (
-    <section id="projects" data-testid="projects-section" className="relative py-28 lg:py-40">
+    <section id="projects" ref={sectionRef} data-testid="projects-section" className="relative py-28 lg:py-40 overflow-hidden">
       <div className="max-w-7xl mx-auto px-6 lg:px-12">
         <div className="max-w-2xl mb-10">
           <p className="font-mono-accent text-xs tracking-[0.3em] uppercase text-[#BF5537] mb-6">(04) — Selected Work</p>
@@ -156,7 +173,7 @@ export default function Projects() {
 
         {/* inline stage (fixed height/width feel) */}
         {!fs && (
-          <div className="rounded-2xl border border-[rgba(27,26,22,0.12)] bg-[#EFEBE3]/40 backdrop-blur-sm py-8">
+          <div className="rounded-2xl border border-[rgba(27,26,22,0.12)] bg-[#EFEBE3]/40 backdrop-blur-sm py-8 overflow-hidden">
             {StageInner}
           </div>
         )}
@@ -167,10 +184,10 @@ export default function Projects() {
         {fs && (
           <motion.div
             initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[80] flex items-center justify-center bg-[#EFEBE3]"
+            className="fixed inset-0 z-[80] flex items-center justify-center bg-[#EFEBE3] overflow-hidden"
             data-testid="project-fullscreen-overlay"
           >
-            <div className="w-full max-w-6xl px-6">{StageInner}</div>
+            <div className="w-full max-w-6xl px-6 overflow-hidden">{StageInner}</div>
           </motion.div>
         )}
       </AnimatePresence>
