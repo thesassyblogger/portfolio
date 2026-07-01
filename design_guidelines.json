@@ -1,0 +1,139 @@
+{
+  "project_name": "Mansi Patel Portfolio",
+  "theme": "dark",
+  "archetype": "5 (Luxury) mixed with 'Editorial Space'",
+  "typography": {
+    "fonts": {
+      "headings": "Cormorant Garamond",
+      "body": "Outfit",
+      "mono_accents": "Space Mono"
+    },
+    "scale": {
+      "h1": "text-5xl sm:text-6xl lg:text-7xl tracking-tighter font-light",
+      "h2": "text-3xl sm:text-4xl tracking-tight font-light",
+      "h3": "text-xl sm:text-2xl",
+      "body": "text-base leading-relaxed",
+      "overline": "text-xs tracking-[0.2em] uppercase font-mono"
+    },
+    "rules": "Do not use 'Inter' for headings. Always use Cormorant Garamond for main sections to give a fashion-editorial vibe. Use Space Mono for technical details like skills or overlines to bridge the developer/space theme."
+  },
+  "colors": {
+    "background": "#050505",
+    "surface": "#121212",
+    "text_primary": "#F4F4F5",
+    "text_secondary": "#A1A1AA",
+    "accent_chrome": "#E2E8F0",
+    "accent_nebula": "#818CF8",
+    "glass_panel": "bg-black/40 backdrop-blur-2xl border border-white/10"
+  },
+  "layout": {
+    "container": "max-w-7xl mx-auto px-6 lg:px-12",
+    "spacing": "Generous spacing. Use py-24 or py-32 for section padding.",
+    "grid_modes": {
+      "bento": "grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6 (For Skills/Experience)",
+      "asymmetrical": "grid grid-cols-1 md:grid-cols-12 gap-12 (For Fashion/Space Galleries)"
+    }
+  },
+  "motion_and_3d": {
+    "libraries": [
+      "@react-three/fiber",
+      "@react-three/drei",
+      "framer-motion",
+      "@studio-freight/react-lenis",
+      "lucide-react"
+    ],
+    "hero_mechanics": "The 3D avatar is the centerpiece. It must be rendered using a full-screen fixed or sticky canvas. Use @react-three/drei's ScrollControls or GSAP ScrollTrigger to tie the avatar's position, rotation, and animation state to the scroll progress.",
+    "scroll_behavior": "Implement Lenis for smooth scroll to make the 3D transitions cinematic.",
+    "avatar_states_per_section": {
+      "Hero": "Floating gracefully in the center, looking directly at the user.",
+      "About": "Moves to the left side of the screen, subtle ambient breathing.",
+      "Skills": "Moves to the right, 'interacting' with floating 3D tech icons or typing.",
+      "Experience": "Centered but scaled down, walking or standing confidently.",
+      "Fashion_Space": "Striking a dynamic editorial pose.",
+      "Contact": "Looking towards the contact form, subtle waving on hover."
+    }
+  },
+  "sections": [
+    {
+      "name": "Hero",
+      "layout": "100vh, flex items-center justify-center relative",
+      "content": "Massive typography 'MANSI PATEL'. Subtitle: 'Full Stack Cloud Engineer'. 3D Avatar positioned in the center. Use a subtle noise texture overlay."
+    },
+    {
+      "name": "About",
+      "layout": "Split layout. Text on right, avatar on left.",
+      "content": "Story connecting Mumbai to Regina, blending technical cloud architecture with a love for fashion and space exploration."
+    },
+    {
+      "name": "Skills",
+      "layout": "Control Room Bento Grid.",
+      "content": "Grouped by Cloud (AWS, Kubernetes, Terraform), Backend (Spring Boot, Node.js), Frontend (React, 3D). Use Space Mono for tags."
+    },
+    {
+      "name": "Experience",
+      "layout": "Asymmetrical Timeline.",
+      "content": "Omit YMCA and Guac Mexi Grill. Focus on tech roles. Use glassmorphism cards for entries."
+    },
+    {
+      "name": "Projects",
+      "layout": "Large cinematic cards with hover reveal.",
+      "content": "Dark images that brighten on hover. High-contrast typography."
+    },
+    {
+      "name": "Travel & Space Gallery",
+      "layout": "Horizontal scroll or Masonry layout.",
+      "content": "Mix of space aesthetic and personal travel. Use Framer Motion for parallax scrolling."
+    },
+    {
+      "name": "Style/Fashion",
+      "layout": "Editorial magazine layout.",
+      "content": "Overlapping images, large serif pull-quotes. Extremely generous white (negative) space."
+    },
+    {
+      "name": "Contact",
+      "layout": "Centered glassmorphism form.",
+      "content": "Customized Shadcn input fields. Must save to DB."
+    }
+  ],
+  "components": {
+    "buttons": "Sharp edges (rounded-none). 1px border-white/20. Hover state: bg-white text-black. Use framer-motion for smooth fill.",
+    "cards": "Minimalist. bg-[#121212] or transparent with border-white/[0.08]. Inner padding p-8.",
+    "forms": "Use pure HTML/Tailwind customized to match the brand. Inputs should have transparent backgrounds, bottom border only (border-b border-white/20), focus:border-white."
+  },
+  "media": {
+    "travel_and_space": [
+      {
+        "url": "https://images.unsplash.com/photo-1712508818673-f9e3875b94b6?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA2MDV8MHwxfHNlYXJjaHw0fHxkZWVwJTIwc3BhY2UlMjBnYWxheHklMjBuZWJ1bGElMjBiYWNrZ3JvdW5kfGVufDB8fHx8MTc4Mjg3NTM5Nnww&ixlib=rb-4.1.0&q=85",
+        "description": "Deep space galaxy background for ambient sections"
+      },
+      {
+        "url": "https://images.unsplash.com/photo-1679615845580-8691c78fd7d3?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA2MDV8MHwxfHNlYXJjaHwzfHxkZWVwJTIwc3BhY2UlMjBnYWxheHklMjBuZWJ1bGElMjBiYWNrZ3JvdW5kfGVufDB8fHx8MTc4Mjg3NTM5Nnww&ixlib=rb-4.1.0&q=85",
+        "description": "Spiral nebula for Travel/Space gallery"
+      }
+    ],
+    "fashion_editorial": [
+      {
+        "url": "https://images.unsplash.com/photo-1664076458686-3449062080ac?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2Nzd8MHwxfHNlYXJjaHwxfHxmYXNoaW9uJTIwZWRpdG9yaWFsJTIwYWVzdGhldGljJTIwYWJzdHJhY3R8ZW58MHx8fHwxNzgyODc1Mzk2fDA&ixlib=rb-4.1.0&q=85",
+        "description": "Editorial fashion shot for style section"
+      },
+      {
+        "url": "https://images.unsplash.com/photo-1546380841-bf3afc314a5d?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2Nzd8MHwxfHNlYXJjaHwzfHxmYXNoaW9uJTIwZWRpdG9yaWFsJTIwYWVzdGhldGljJTIwYWJzdHJhY3R8ZW58MHx8fHwxNzgyODc1Mzk2fDA&ixlib=rb-4.1.0&q=85",
+        "description": "Abstract glossy texture for fashion section accents"
+      }
+    ]
+  },
+  "testing": {
+    "attributes": "All interactive and key informational elements MUST include a data-testid attribute.",
+    "convention": "Use kebab-case, role-based identifiers. Example: data-testid='hero-contact-button', data-testid='about-section-container', data-testid='contact-form-submit'."
+  },
+  "instructions_to_main_agent": [
+    "You have .js files, NOT .tsx files. Write all React code in standard .js/.jsx.",
+    "Install required dependencies: yarn add @react-three/fiber @react-three/drei framer-motion @studio-freight/react-lenis lucide-react",
+    "Use a placeholder <mesh> (like a capsule or basic loaded GLTF) for the 3D avatar that can easily be swapped out later. Assign it data-testid='3d-avatar-placeholder'.",
+    "Ensure the 3D Canvas is rendering behind the DOM content but allows pointer events to pass through where necessary, or place DOM overlays explicitly on top.",
+    "Do NOT center everything. Use asymmetrical layouts, especially in the Experience and Gallery sections.",
+    "Maintain strict adherence to the Typography and Color scale defined here.",
+    "Use standard HTML/Tailwind for layouts and custom forms; avoid overusing Shadcn card components to keep the layout feeling art-directed rather than template-like.",
+    "Remember to omit YMCA and Guac Mexi Grill from the experience section."
+  ]
+}
