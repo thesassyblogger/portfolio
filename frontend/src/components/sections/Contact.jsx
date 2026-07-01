@@ -25,7 +25,8 @@ export default function Contact() {
       toast.success("Message sent! Mansi will get back to you soon. ✦");
       setForm({ name: "", email: "", subject: "", message: "" });
     } catch (err) {
-      toast.error("Something went wrong. Please try again.");
+      const detail = err?.response?.data?.detail;
+      toast.error(typeof detail === "string" ? detail : "Something went wrong. Please try again.");
     } finally {
       setLoading(false);
     }
