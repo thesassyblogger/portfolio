@@ -119,7 +119,7 @@ export default function Projects() {
                 opacity,
                 pointerEvents: front > 0.2 ? "auto" : "none",
               }}
-              onClick={() => openCard(p)}
+              onClick={() => isFront && openCard(p)}
               data-testid={`project-card-${i}`}
             >
               <div

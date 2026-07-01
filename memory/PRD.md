@@ -33,6 +33,13 @@ Per user feedback the dark space theme hurt readability; redesigned to a LIGHT n
 - Responsive; fixed mobile horizontal overflow (overflow-x: clip on html + overflow-hidden on projects).
 - Verified: testing agent — backend 7/7, frontend ~95% (mobile overflow fixed after retest guidance).
 
+## Iteration 3 — Polish & Interactivity (2026-07-01)
+- Project cards now use real cropped screenshots (Mango, Sunflower, Real-Time Chat, Task Manager) with browser chrome/taskbar removed; removed the Live/Code tag badge.
+- Single CONSTANT avatar (one character) that crossfades between poses per section (no vanish/replace), with a one-time entrance animation and cursor-follow tilt on the Home section only.
+- Added a creative desktop custom cursor (lagging ring + dot; disabled on touch; pointer-events none so it never blocks clicks).
+- Redesigned About (animated count-up stats + interests marquee), Skills (interactive accordion), Experience (scroll-drawn timeline + hover-expand cards) for unique motion.
+- Verified: testing agent — backend 7/7, frontend ~97%→fixed (Sunflower image wired; front-only card click).
+
 ## Backlog / Next
 - P1: Swap stylized avatar for a likeness generated from Mansi's real photos (she sent 3); optional GLTF animated model.
 - P2: Admin view for contact messages; email notifications (Resend/SendGrid).

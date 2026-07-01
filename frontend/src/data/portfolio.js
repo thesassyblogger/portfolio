@@ -90,6 +90,7 @@ export const PROJECTS = [
     desc: "A bright, elegant landing experience focused on typography, spacing and a warm, inviting aesthetic.",
     link: "https://thesassyblogger.github.io/sunflower/",
     live: true,
+    image: "/projects/sunflower.jpg",
     hue: "#C9922E",
   },
   {
