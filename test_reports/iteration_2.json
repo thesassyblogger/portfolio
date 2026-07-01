@@ -1,0 +1,33 @@
+{
+  "summary": "Iteration 2 (major redesign) tested end-to-end. Backend contact API: 7/7 pytest cases pass (POST 201 + persistence, GET 200 list, 422 on invalid email / empty strings / missing fields, optional subject default). Frontend: Preloader appears on first load and reliably lifts within ~6s revealing hero. Hero shows 'MANSI PATEL' serif text and the mature avatar on light cream background. Zero runtime error overlays. All 6 nav links (nav-home/about/skills/work/projects/contact) smooth-scroll to their sections and active state updates. Projects rotating 3D cylinder renders with all 6 cards (Mango, Sunflower, Real-Time Chat App, Cloud Vendor / Task Manager, Production AWS DevOps, DevOps Pipeline (SaaS)) — auto-rotation confirmed via delta transform, fullscreen toggle opens/closes overlay correctly, clicking a card opens detail modal with correct link (https://thesassyblogger.github.io/Mango/ for Mango). Experience section contains exactly Pqxel Inc. + University of Regina, with NO YMCA and NO Guac Mexi Grill. Skills renders, About mentions Mumbai + Regina. Contact form: empty submit shows error toast (no POST fired), valid submit hits backend, shows success toast, clears form. Tablet 820x1180: no horizontal overflow, cylinder renders. Mobile 390x844: nav-mobile-toggle opens/closes menu, hero readable, cylinder renders — but a HORIZONTAL OVERFLOW of ~42px (scrollWidth=432 vs clientWidth=390) is present, which will let the mobile page scroll sideways.",
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [
+      {"component": "Projects cylinder / mobile layout", "issue": "At 390px viewport the document scrollWidth is 432px (42px horizontal overflow). The mobile page can be scrolled sideways. Most likely culprit is the 3D cylinder stage (perspective + rotateY transforms of children extending past the container) or the fullscreen toggle absolute position. Tablet 820px is clean.", "selector": "[data-testid='projects-section'] [data-testid='project-cylinder']", "priority": "MEDIUM"}
+    ],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": ["/app/backend/tests/test_contact_api.py", "/app/test_reports/pytest/pytest_results.xml"],
+  "action_items": [
+    "Fix mobile horizontal overflow (390px viewport shows 432px scrollWidth = 42px overflow). Add `overflow-x: hidden` on the Projects section (or a wrapper) OR clamp the cylinder stage width — likely candidate is the 3D-transformed cards extending outside their container. Recommend adding `overflow-hidden` on the `[data-testid='projects-section']` and/or the rounded stage container that wraps StageInner."
+  ],
+  "critical_code_review_comments": [
+    "Projects.jsx: the auto-rotate rAF loop runs continuously even when the projects section is off-screen. Consider gating rotation with an IntersectionObserver on the section for a small perf win and to reduce needless renders (setAngle on every frame triggers re-render of all 6 cards).",
+    "Projects.jsx: the fullscreen state uses `position: fixed inset-0` but does not lock body scroll (no overflow:hidden on <body> while overlay is open). On mobile you can still scroll the underlying page behind the fullscreen overlay.",
+    "Projects.jsx: `onMouseLeave` calls `onUp()` but not `setPaused(false)` reset for touch — on mobile there is no hover, so pause is effectively never triggered. Consider adding a manual pause button for touch users.",
+    "server.py: still no rate-limiting on POST /api/contact — a bot could spam contact_messages. Consider a simple per-IP throttler (fastapi-limiter or in-memory sliding-window) for production.",
+    "server.py: `logger.info` is fine but `basicConfig` is defined at module import time — same fragile ordering flagged in iteration 1 still present."
+  ],
+  "updated_files": [],
+  "success_rate": {"backend": "100% (7/7)", "frontend": "~95% (all functional checks pass; 1 mobile overflow bug)"},
+  "test_credentials": "N/A — no auth in this app.",
+  "seed_data_creation": "One TEST_-prefixed contact message inserted by the Playwright happy-path submission (via /api/contact). Existing pytest also seeds a couple TEST_ documents. Not cleaned up — trivially filterable in Mongo.",
+  "retest_needed": true,
+  "should_main_agent_self_test": true,
+  "context_for_next_testing_agent": "Preloader is skippable with ?fast — use for all non-hero flows. All required data-testids are in place (preloader, hero-section, nav-{home|about|skills|work|projects|contact}, nav-mobile-toggle, projects-section, project-cylinder, project-card-0..5, project-fullscreen-toggle, project-fullscreen-overlay, project-detail-modal, project-detail-close, project-detail-link, experience-section, skills-section, about-section, contact-form, contact-input-{name|email|subject|message}, contact-submit-button). Backend regression: `pytest /app/backend/tests/test_contact_api.py -v`. If retesting mobile overflow: `page.set_viewport_size({'width': 390, 'height': 844})` and evaluate `document.documentElement.scrollWidth` — expect <= 390.",
+  "rca of the issue": "Mobile horizontal overflow @ 390px: the 3D-transformed cards (translateZ + rotateY) inside `[data-testid=project-cylinder']` are positioned absolutely and, given their card width of 165px and radius ~200px on small screens, some cards project past the viewport horizontally. The parent container has `perspective: 1100` but no `overflow: hidden` clip. Fix: add `overflow-x: hidden` (or `overflow: hidden`) on either the section (`#projects`), the rounded stage wrapper (`div.rounded-2xl.border...bg-[#EFEBE3]/40`), or on the cylinder container itself. Confirmed reproducible: at width=390 `scrollWidth=432` (delta=42px)."
+}

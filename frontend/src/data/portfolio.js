@@ -1,11 +1,9 @@
-// Portfolio content for Mansi Patel
+// Portfolio content for Mansi Patel — neutral editorial theme
 export const AVATARS = {
   hero: "/avatars/hero.png",
   coding: "/avatars/coding.png",
-  traveling: "/avatars/traveling.png",
-  fashion: "/avatars/fashion.png",
-  space: "/avatars/space.png",
-  waving: "/avatars/waving.png",
+  present: "/avatars/present.png",
+  wave: "/avatars/wave.png",
 };
 
 export const PROFILE = {
@@ -20,14 +18,15 @@ export const PROFILE = {
   linkedin: "https://www.linkedin.com/in/mansi-patel-695080219/",
   github: "https://github.com/thesassyblogger",
   summary:
-    "Full Stack Cloud Engineer architecting scalable, cloud-native microservices and secure CI/CD pipelines. I build production-grade applications with MERN and Spring Boot, powered by Infrastructure as Code, containers, and a designer's eye for detail.",
+    "I architect scalable, cloud-native systems and craft interfaces with a designer's eye — turning complex infrastructure into products that feel effortless.",
+  keywords: ["FULL-STACK", "CLOUD / DEVOPS", "MERN", "DESIGN-MINDED"],
 };
 
 export const SKILL_GROUPS = [
   {
     label: "Cloud & DevOps",
     tag: "// infrastructure",
-    items: ["AWS (EKS, ECR, EC2, IAM)", "Terraform / IaC", "Docker", "Kubernetes", "Helm", "ArgoCD (GitOps)", "Jenkins", "Prometheus", "Grafana"],
+    items: ["AWS (EKS, ECR, EC2, IAM)", "Terraform / IaC", "Docker", "Kubernetes", "Helm", "ArgoCD", "Jenkins", "Prometheus", "Grafana"],
   },
   {
     label: "Backend",
@@ -53,9 +52,9 @@ export const EXPERIENCE = [
     period: "May 2025 — Jun 2026",
     location: "Regina, SK · Remote",
     points: [
-      "Engineered end-to-end development of web-based platforms using React, Node.js, Express, and MongoDB.",
-      "Architected reusable front-end components, responsive UI, and API-driven features aligned with enterprise product requirements.",
-      "Spearheaded Agile workflows using Jira, performing code reviews, debugging, and version control best practices.",
+      "Engineered end-to-end web platforms using React, Node.js, Express, and MongoDB.",
+      "Architected reusable front-end components, responsive UI, and API-driven features for enterprise products.",
+      "Spearheaded Agile workflows in Jira, performing code reviews, debugging, and version-control best practices.",
     ],
   },
   {
@@ -65,39 +64,72 @@ export const EXPERIENCE = [
     location: "Regina, SK · On-site",
     points: [
       "Optimized mission-critical IT infrastructure for live events, resolving complex networking and hardware bottlenecks.",
-      "Modernized ticketing and networking systems (Wi-Fi / POS), ensuring seamless operational flow for university-scale events.",
+      "Modernized ticketing and networking systems (Wi-Fi / POS) for seamless university-scale event operations.",
     ],
   },
 ];
 
+// Projects for the rotating cylinder gallery
 export const PROJECTS = [
   {
-    name: "Production-Grade AWS DevOps Ecosystem",
-    year: "2025",
-    stack: ["Terraform", "EKS", "SonarQube", "Trivy", "Prometheus", "Grafana"],
-    desc: "A fully automated GitOps pipeline provisioning VPCs, IAM roles and EKS clusters, with quality gates ensuring 100% of commits meet security standards before ECR deployment.",
-    link: "https://github.com/thesassyblogger",
+    name: "Mango",
+    year: "Web",
+    kind: "Live Website",
+    stack: ["HTML", "CSS", "JavaScript", "Responsive UI"],
+    desc: "A polished, responsive marketing website with clean layout, smooth interactions and a bold brand identity.",
+    link: "https://thesassyblogger.github.io/Mango/",
+    live: true,
+    hue: "#BF5537",
   },
   {
-    name: "Enterprise SaaS Task Orchestrator",
-    year: "2025",
-    stack: ["MERN", "JWT", "CI/CD", "ExcelJS", "Recharts"],
-    desc: "A role-based task management engine with JWT authentication and full CI/CD automation, featuring advanced analytics that transform raw data into actionable business intelligence.",
-    link: "https://github.com/thesassyblogger/Mern-Task-Manager",
+    name: "Sunflower",
+    year: "Web",
+    kind: "Live Website",
+    stack: ["HTML", "CSS", "JavaScript"],
+    desc: "A bright, elegant landing experience focused on typography, spacing and a warm, inviting aesthetic.",
+    link: "https://thesassyblogger.github.io/sunflower/",
+    live: true,
+    hue: "#C9922E",
   },
   {
-    name: "Real-Time Chat App on Google Cloud",
+    name: "Real-Time Chat App",
     year: "2024",
-    stack: ["Node.js", "Socket.IO", "GCP App Engine", "Cloud Build"],
-    desc: "Real-time group chat built with Node.js, Express and Socket.IO, deployed to GCP App Engine with IAM, Artifact Registry and Cloud Build.",
-    link: "https://github.com/thesassyblogger",
+    kind: "Full-Stack",
+    stack: ["Node.js", "Express", "Socket.IO", "GCP"],
+    desc: "Real-time group chat with Socket.IO, deployed to Google Cloud App Engine with IAM, Artifact Registry and Cloud Build.",
+    link: "https://github.com/thesassyblogger/webst",
+    live: false,
+    hue: "#35594E",
   },
   {
-    name: "Cloud Vendor Management API",
+    name: "Cloud Vendor / Task Manager",
     year: "2025",
-    stack: ["Spring Boot", "REST", "Postman", "Agile"],
-    desc: "A REST CRUD backend for vendor entities built in Spring Boot, tested with Postman and delivered through Agile sprints in Jira with Epics and Stories.",
-    link: "https://github.com/thesassyblogger",
+    kind: "MERN · Full-Stack",
+    stack: ["MERN", "JWT", "Recharts", "ExcelJS"],
+    desc: "A role-based task management engine with JWT auth and analytics that turn raw data into actionable business intelligence.",
+    link: "https://github.com/thesassyblogger/Mern-Task-Manager",
+    live: false,
+    hue: "#4A5A7A",
+  },
+  {
+    name: "Production AWS DevOps",
+    year: "2025",
+    kind: "DevOps · CI/CD",
+    stack: ["AWS", "Docker", "CI/CD", "Node"],
+    desc: "A production-grade Node app with an automated CI/CD pipeline — from commit to containerized, production-ready deployment.",
+    link: "https://github.com/thesassyblogger/node-todo-cicd",
+    live: false,
+    hue: "#7A4A5A",
+  },
+  {
+    name: "DevOps Pipeline (SaaS)",
+    year: "2025",
+    kind: "GitOps · IaC",
+    stack: ["Terraform", "EKS", "SonarQube", "Trivy"],
+    desc: "An automated GitOps pipeline provisioning VPCs, IAM and EKS with security quality gates and Prometheus/Grafana observability.",
+    link: "https://github.com/thesassyblogger/DevopsProject2",
+    live: false,
+    hue: "#3E6B57",
   },
 ];
 
@@ -109,4 +141,4 @@ export const CERTS = [
   "Git & GitHub — IBM",
 ];
 
-export const NAV = ["Home", "About", "Skills", "Work", "Projects", "Cosmos", "Style", "Contact"];
+export const NAV = ["Home", "About", "Skills", "Work", "Projects", "Contact"];

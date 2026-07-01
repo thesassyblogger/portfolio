@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import "@/App.css";
 import { Toaster } from "sonner";
-import CosmicBackground from "@/components/CosmicBackground";
+import AmbientBackground from "@/components/AmbientBackground";
+import Preloader from "@/components/Preloader";
 import Avatar from "@/components/Avatar";
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/sections/Hero";
@@ -9,8 +10,6 @@ import About from "@/components/sections/About";
 import Skills from "@/components/sections/Skills";
 import Experience from "@/components/sections/Experience";
 import Projects from "@/components/sections/Projects";
-import Cosmos from "@/components/sections/Cosmos";
-import Style from "@/components/sections/Style";
 import Contact from "@/components/sections/Contact";
 import Footer from "@/components/sections/Footer";
 
@@ -20,13 +19,13 @@ const SECTION_MAP = [
   ["skills", "Skills"],
   ["work", "Work"],
   ["projects", "Projects"],
-  ["cosmos", "Cosmos"],
-  ["style", "Style"],
   ["contact", "Contact"],
 ];
 
 function App() {
   const [active, setActive] = useState("Home");
+  const skipPreload = typeof window !== "undefined" && new URLSearchParams(window.location.search).has("fast");
+  const [loaded, setLoaded] = useState(skipPreload);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -45,11 +44,12 @@ function App() {
       if (el) observer.observe(el);
     });
     return () => observer.disconnect();
-  }, []);
+  }, [loaded]);
 
   return (
     <div className="App grain relative min-h-screen">
-      <CosmicBackground />
+      {!skipPreload && <Preloader onDone={() => setLoaded(true)} />}
+      <AmbientBackground />
       <Navbar active={active} />
       <Avatar active={active} />
 
@@ -59,20 +59,17 @@ function App() {
         <Skills />
         <Experience />
         <Projects />
-        <Cosmos />
-        <Style />
         <Contact />
         <Footer />
       </main>
 
       <Toaster
         position="bottom-right"
-        theme="dark"
         toastOptions={{
           style: {
-            background: "#121212",
-            border: "1px solid rgba(255,255,255,0.1)",
-            color: "#F4F4F5",
+            background: "#F7F4ED",
+            border: "1px solid rgba(27,26,22,0.15)",
+            color: "#1B1A16",
             fontFamily: "Space Mono, monospace",
             fontSize: "12px",
           },
