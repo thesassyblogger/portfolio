@@ -1,54 +1,83 @@
-import { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import "@/App.css";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import axios from "axios";
-import { HOME } from "@/constants/testIds";
+import { Toaster } from "sonner";
+import CosmicBackground from "@/components/CosmicBackground";
+import Avatar from "@/components/Avatar";
+import Navbar from "@/components/Navbar";
+import Hero from "@/components/sections/Hero";
+import About from "@/components/sections/About";
+import Skills from "@/components/sections/Skills";
+import Experience from "@/components/sections/Experience";
+import Projects from "@/components/sections/Projects";
+import Cosmos from "@/components/sections/Cosmos";
+import Style from "@/components/sections/Style";
+import Contact from "@/components/sections/Contact";
+import Footer from "@/components/sections/Footer";
 
-const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
-const API = `${BACKEND_URL}/api`;
+const SECTION_MAP = [
+  ["home", "Home"],
+  ["about", "About"],
+  ["skills", "Skills"],
+  ["work", "Work"],
+  ["projects", "Projects"],
+  ["cosmos", "Cosmos"],
+  ["style", "Style"],
+  ["contact", "Contact"],
+];
 
-const Home = () => {
-  const helloWorldApi = async () => {
-    try {
-      const response = await axios.get(`${API}/`);
-      console.log(response.data.message);
-    } catch (e) {
-      console.error(e, `errored out requesting / api`);
-    }
-  };
+function App() {
+  const [active, setActive] = useState("Home");
 
   useEffect(() => {
-    helloWorldApi();
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const found = SECTION_MAP.find(([id]) => id === entry.target.id);
+            if (found) setActive(found[1]);
+          }
+        });
+      },
+      { rootMargin: "-45% 0px -45% 0px", threshold: 0 }
+    );
+    SECTION_MAP.forEach(([id]) => {
+      const el = document.getElementById(id);
+      if (el) observer.observe(el);
+    });
+    return () => observer.disconnect();
   }, []);
 
   return (
-    <div>
-      <header className="App-header">
-        <a
-          data-testid={HOME.emergentLink}
-          className="App-link"
-          href="https://emergent.sh"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <img src="https://avatars.githubusercontent.com/in/1201222?s=120&u=2686cf91179bbafbc7a71bfbc43004cf9ae1acea&v=4" />
-        </a>
-        <p className="mt-5">Building something incredible ~!</p>
-      </header>
-    </div>
-  );
-};
+    <div className="App grain relative min-h-screen">
+      <CosmicBackground />
+      <Navbar active={active} />
+      <Avatar active={active} />
 
-function App() {
-  return (
-    <div className="App">
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Home />}>
-            <Route index element={<Home />} />
-          </Route>
-        </Routes>
-      </BrowserRouter>
+      <main className="relative z-10">
+        <Hero />
+        <About />
+        <Skills />
+        <Experience />
+        <Projects />
+        <Cosmos />
+        <Style />
+        <Contact />
+        <Footer />
+      </main>
+
+      <Toaster
+        position="bottom-right"
+        theme="dark"
+        toastOptions={{
+          style: {
+            background: "#121212",
+            border: "1px solid rgba(255,255,255,0.1)",
+            color: "#F4F4F5",
+            fontFamily: "Space Mono, monospace",
+            fontSize: "12px",
+          },
+        }}
+      />
     </div>
   );
 }
