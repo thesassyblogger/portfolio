@@ -42,6 +42,15 @@ Per user feedback the dark space theme hurt readability; redesigned to a LIGHT n
 
 ## Backlog / Next
 - P1: Swap stylized avatar for a likeness generated from Mansi's real photos (she sent 3); optional GLTF animated model.
+- P1: Replace Travel & Style stock placeholders with Mansi's own travel/fashion photos.
 - P2: Admin view for contact messages; email notifications (Resend/SendGrid).
 - P2: Pause WebGL RAF on tab hidden; replace deprecated THREE.Clock; add rate limiting/captcha on contact.
-- P2: More travel/fashion photos, project screenshots, downloadable resume button.
+- P2: Downloadable resume button; SEO/OG meta tags for shareability.
+
+## Iteration 4 — Loading Animation + Travel & Style (2026-07-03)
+- New unique Preloader: scattered serif letters spring-assemble into "MANSI PATEL" inside a progress ring, then vertical panels sweep up to reveal the site (skippable via ?fast). Verified working.
+- Re-added TRAVEL section: horizontal sticky-scroll gallery (Mumbai, Regina, Saskatchewan, Kyoto, Cam Ranh) with parallax image cards + location typography overlays. (05) — Travel.
+- Re-added STYLE / Off-hours section: editorial magazine spread (4 images, asymmetric overlapping grid, parallax + hover captions). (06) — Off Hours.
+- Enhanced About (parallax watermark, slow-spinning editorial seal, animated underline draw, interactive count-up stats), Skills (growing accent bar, tool counts, row hover motion), Experience (large faint index numerals).
+- Navbar now 8 links; Avatar gained Travel(right)/Style(left) shifted+shrunk poses so it doesn't block content.
+- Verified: testing agent iteration_9 — frontend 100%, no console errors, no regressions on cylinder/contact. Travel/Style stock images are placeholders.
