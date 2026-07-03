@@ -131,9 +131,9 @@ export default function Projects() {
                   transform: isFront ? "scale(1.04)" : "scale(1)",
                 }}
               >
-                <div className="h-1/2 relative flex items-center justify-center overflow-hidden" style={{ background: `linear-gradient(135deg, ${p.hue}, ${p.hue}bb)` }}>
+                <div className="h-1/2 relative flex items-center justify-center overflow-hidden" style={{ background: p.image ? "#ffffff" : `linear-gradient(135deg, ${p.hue}, ${p.hue}bb)` }}>
                   {p.image ? (
-                    <img src={p.image} alt={p.name} draggable={false} className="absolute inset-0 w-full h-full object-cover object-top" />
+                    <img src={p.image} alt={p.name} draggable={false} className="absolute inset-0 w-full h-full object-contain" />
                   ) : (
                     <span className="font-serif-display text-white/95 text-5xl leading-none">{p.name.charAt(0)}</span>
                   )}
