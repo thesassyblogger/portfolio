@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Maximize2, Minimize2, ArrowUpRight, X, ExternalLink, Github } from "lucide-react";
+import { Maximize2, Minimize2, ArrowUpRight, X, ExternalLink, Github, ChevronLeft, ChevronRight } from "lucide-react";
 import { PROJECTS } from "../../data/portfolio";
 
 const N = PROJECTS.length;
@@ -19,6 +19,7 @@ export default function Projects() {
   angleRef.current = angle;
   const sectionRef = useRef(null);
   const [inView, setInView] = useState(true);
+  const [autoPlay, setAutoPlay] = useState(true);
 
   // pause rotation when section is off-screen (perf)
   useEffect(() => {
@@ -56,18 +57,35 @@ export default function Projects() {
   useEffect(() => {
     let raf;
     const tick = () => {
-      if (!paused && !dragging.current && !selected && (inView || fs)) {
+      if (autoPlay && !paused && !dragging.current && !selected && (inView || fs)) {
         setAngle((a) => (a + 0.16) % 360);
       }
       raf = requestAnimationFrame(tick);
     };
     raf = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(raf);
-  }, [paused, selected, inView, fs]);
+  }, [paused, selected, inView, fs, autoPlay]);
+
+  // rotate a specific card index to the front (eff = 0)
+  const goToIndex = (i) => {
+    setAutoPlay(false);
+    const base = -i * THETA;
+    const cur = angleRef.current;
+    // pick nearest equivalent angle for a short, smooth turn
+    let target = base;
+    while (target - cur > 180) target -= 360;
+    while (target - cur < -180) target += 360;
+    setAngle(target);
+  };
+  const step = (dir) => {
+    setAutoPlay(false);
+    setAngle((a) => a - dir * THETA);
+  };
 
   const onDown = (e) => {
     dragging.current = true;
     moved.current = 0;
+    setAutoPlay(false);
     lastX.current = e.touches ? e.touches[0].clientX : e.clientX;
   };
   const onMove = (e) => {
@@ -80,12 +98,10 @@ export default function Projects() {
   };
   const onUp = () => { dragging.current = false; };
 
-  const openCard = (p) => { if (moved.current < 6) setSelected(p); };
-
   const StageInner = (
     <div
       className="relative select-none"
-      style={{ height: dims.cardH + 60, perspective: 1100 }}
+      style={{ height: dims.cardH + 110, perspective: 1100 }}
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => { setPaused(false); onUp(); }}
       onMouseDown={onDown}
@@ -101,6 +117,7 @@ export default function Projects() {
         style={{
           transformStyle: "preserve-3d",
           transform: `translate(-50%,-50%) translateZ(${-dims.radius}px) rotateY(${angle}deg)`,
+          transition: (autoPlay || dragging.current) ? "none" : "transform 0.7s cubic-bezier(0.22,1,0.36,1)",
           width: dims.cardW,
           height: dims.cardH,
         }}
@@ -119,7 +136,7 @@ export default function Projects() {
                 opacity,
                 pointerEvents: front > -0.5 ? "auto" : "none",
               }}
-              onClick={() => openCard(p)}
+              onClick={() => { if (moved.current >= 6) return; if (isFront) setSelected(p); else goToIndex(i); }}
               data-testid={`project-card-${i}`}
             >
               <div
@@ -160,6 +177,19 @@ export default function Projects() {
       >
         {fs ? <Minimize2 className="w-4 h-4" /> : <Maximize2 className="w-4 h-4" />}
       </button>
+
+      {/* prev / next / resume controls */}
+      <div className="absolute left-1/2 -translate-x-1/2 bottom-0 z-10 flex items-center gap-3">
+        <button onClick={() => step(-1)} data-testid="project-prev" aria-label="Previous project" className="p-3 rounded-full bg-[#F7F4ED] border border-[rgba(27,26,22,0.15)] text-[#1B1A16] hover:bg-[#1B1A16] hover:text-[#EFEBE3] transition-colors shadow-sm">
+          <ChevronLeft className="w-4 h-4" />
+        </button>
+        <button onClick={() => setAutoPlay((v) => !v)} data-testid="project-autoplay" aria-label="Toggle auto-rotate" className={`px-4 py-2 rounded-full border text-[10px] font-mono-accent uppercase tracking-[0.15em] transition-colors ${autoPlay ? "bg-[#BF5537] text-white border-[#BF5537]" : "bg-[#F7F4ED] text-[#1B1A16] border-[rgba(27,26,22,0.15)]"}`}>
+          {autoPlay ? "Auto" : "Play"}
+        </button>
+        <button onClick={() => step(1)} data-testid="project-next" aria-label="Next project" className="p-3 rounded-full bg-[#F7F4ED] border border-[rgba(27,26,22,0.15)] text-[#1B1A16] hover:bg-[#1B1A16] hover:text-[#EFEBE3] transition-colors shadow-sm">
+          <ChevronRight className="w-4 h-4" />
+        </button>
+      </div>
     </div>
   );
 
@@ -171,7 +201,7 @@ export default function Projects() {
           <h2 className="font-serif-display font-light text-4xl sm:text-5xl lg:text-6xl text-[#1B1A16] leading-tight">
             A rotating gallery of <span className="italic text-[#BF5537]">things I've built</span>.
           </h2>
-          <p className="text-[#6E685B] text-sm mt-4 font-mono-accent tracking-wide">Drag to spin · hover to pause · tap a card · expand ⤢</p>
+          <p className="text-[#6E685B] text-sm mt-4 font-mono-accent tracking-wide">Drag to spin · click a card to focus/open · ‹ › to browse · ⤢ expand</p>
         </div>
 
         {/* inline stage (fixed height/width feel) */}
