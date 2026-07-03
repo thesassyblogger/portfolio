@@ -53,7 +53,7 @@ function App() {
       {!skipPreload && <Preloader onDone={() => setLoaded(true)} />}
       <AmbientBackground />
       <Navbar active={active} />
-      <Avatar active={active} />
+      <Avatar active={active} ready={loaded} />
 
       <main className="relative z-10">
         <Hero />
