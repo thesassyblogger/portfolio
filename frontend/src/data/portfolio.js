@@ -1,9 +1,9 @@
 // Portfolio content for Mansi Patel — neutral editorial theme
 export const AVATARS = {
   hero: "/avatars/hero.png",
-  coding: "/avatars/coding.png",
-  present: "/avatars/present.png",
-  wave: "/avatars/wave.png",
+  wave: "/avatars/pose_wave.png",
+  arms: "/avatars/pose_arms.png",
+  present: "/avatars/pose_present.png",
 };
 
 export const PROFILE = {

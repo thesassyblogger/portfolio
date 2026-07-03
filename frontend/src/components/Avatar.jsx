@@ -5,12 +5,12 @@ import { AVATARS } from "../data/portfolio";
 // One consistent character; poses crossfade in place.
 // The whole figure turns/leans toward the cursor everywhere — she feels alive.
 const STATES = {
-  Home: { src: AVATARS.hero, side: "center", scale: 1, tag: "Hello, I'm Mansi" },
-  About: { src: AVATARS.hero, side: "left", scale: 0.98, tag: "A little about me" },
-  Skills: { src: AVATARS.hero, side: "right", scale: 1.0, tag: "Building, always" },
-  Work: { src: AVATARS.hero, side: "left", scale: 0.98, tag: "My journey" },
-  Projects: { src: AVATARS.hero, side: "left", scale: 0.82, tag: "Take a look" },
-  Contact: { src: AVATARS.hero, side: "right", scale: 0.98, tag: "Let's talk" },
+  Home: { src: AVATARS.hero, side: "center", scale: 1, tag: "Hello, I'm Mansi", blink: true },
+  About: { src: AVATARS.wave, side: "left", scale: 0.98, tag: "A little about me" },
+  Skills: { src: AVATARS.arms, side: "right", scale: 1.0, tag: "Building, always" },
+  Work: { src: AVATARS.present, side: "left", scale: 0.96, tag: "My journey" },
+  Projects: { src: AVATARS.present, side: "left", scale: 0.82, tag: "Take a look" },
+  Contact: { src: AVATARS.wave, side: "right", scale: 0.98, tag: "Let's talk" },
 };
 
 const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
@@ -161,8 +161,8 @@ export default function Avatar({ active, ready = true }) {
               />
             </AnimatePresence>
 
-            {/* subtle blink — skin-matched eyelids drop briefly every few seconds */}
-            {entered && (
+            {/* subtle blink — only on the frontal Home pose (calibrated eye positions) */}
+            {entered && state.blink && (
               <div className="absolute bottom-0 left-1/2 -translate-x-1/2 h-full pointer-events-none" style={{ aspectRatio: "366 / 1099" }}>
                 <Lid x={EYES.left.x} y={EYES.left.y} w={EYES.w} h={EYES.h} delay={0} />
                 <Lid x={EYES.right.x} y={EYES.right.y} w={EYES.w} h={EYES.h} delay={0.03} />
