@@ -66,17 +66,7 @@ export default function Projects() {
     return () => cancelAnimationFrame(raf);
   }, [paused, selected, inView, fs, autoPlay]);
 
-  // rotate a specific card index to the front (eff = 0)
-  const goToIndex = (i) => {
-    setAutoPlay(false);
-    const base = -i * THETA;
-    const cur = angleRef.current;
-    // pick nearest equivalent angle for a short, smooth turn
-    let target = base;
-    while (target - cur > 180) target -= 360;
-    while (target - cur < -180) target += 360;
-    setAngle(target);
-  };
+  // rotate one project step; disables auto-rotate
   const step = (dir) => {
     setAutoPlay(false);
     setAngle((a) => a - dir * THETA);
@@ -136,7 +126,7 @@ export default function Projects() {
                 opacity,
                 pointerEvents: front > -0.5 ? "auto" : "none",
               }}
-              onClick={() => { if (moved.current >= 6) return; if (isFront) setSelected(p); else goToIndex(i); }}
+              onClick={() => { if (moved.current < 6) setSelected(p); }}
               data-testid={`project-card-${i}`}
             >
               <div
@@ -178,13 +168,10 @@ export default function Projects() {
         {fs ? <Minimize2 className="w-4 h-4" /> : <Maximize2 className="w-4 h-4" />}
       </button>
 
-      {/* prev / next / resume controls */}
-      <div className="absolute left-1/2 -translate-x-1/2 bottom-0 z-10 flex items-center gap-3">
+      {/* prev / next controls */}
+      <div className="absolute left-1/2 -translate-x-1/2 bottom-0 z-10 flex items-center gap-4">
         <button onClick={() => step(-1)} data-testid="project-prev" aria-label="Previous project" className="p-3 rounded-full bg-[#F7F4ED] border border-[rgba(27,26,22,0.15)] text-[#1B1A16] hover:bg-[#1B1A16] hover:text-[#EFEBE3] transition-colors shadow-sm">
           <ChevronLeft className="w-4 h-4" />
-        </button>
-        <button onClick={() => setAutoPlay((v) => !v)} data-testid="project-autoplay" aria-label="Toggle auto-rotate" className={`px-4 py-2 rounded-full border text-[10px] font-mono-accent uppercase tracking-[0.15em] transition-colors ${autoPlay ? "bg-[#BF5537] text-white border-[#BF5537]" : "bg-[#F7F4ED] text-[#1B1A16] border-[rgba(27,26,22,0.15)]"}`}>
-          {autoPlay ? "Auto" : "Play"}
         </button>
         <button onClick={() => step(1)} data-testid="project-next" aria-label="Next project" className="p-3 rounded-full bg-[#F7F4ED] border border-[rgba(27,26,22,0.15)] text-[#1B1A16] hover:bg-[#1B1A16] hover:text-[#EFEBE3] transition-colors shadow-sm">
           <ChevronRight className="w-4 h-4" />
