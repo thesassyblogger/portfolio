@@ -15,6 +15,30 @@ const STATES = {
 
 const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
 
+// eye centres (as % of the hero image box) for the blink lids
+const EYES = { left: { x: 37.0, y: 9.05 }, right: { x: 50.4, y: 8.95 }, w: 5.2, h: 2.3 };
+
+function Lid({ x, y, w, h, delay }) {
+  return (
+    <motion.div
+      className="absolute -translate-x-1/2"
+      data-testid="avatar-lid"
+      style={{
+        left: `${x}%`,
+        top: `${y - h / 2}%`,
+        width: `${w}%`,
+        height: `${h}%`,
+        transformOrigin: "top",
+        borderBottomLeftRadius: "45%",
+        borderBottomRightRadius: "45%",
+        background: "linear-gradient(180deg, #b0745a 0%, #9a6248 45%, #6e4130 85%, #3a2013 100%)",
+      }}
+      animate={{ scaleY: [0, 0, 1, 0, 0] }}
+      transition={{ duration: 5.2, repeat: Infinity, delay, times: [0, 0.955, 0.978, 0.999, 1], ease: "easeInOut" }}
+    />
+  );
+}
+
 export default function Avatar({ active, ready = true }) {
   const state = STATES[active] || STATES.Home;
   const side = state.side;
@@ -136,6 +160,14 @@ export default function Avatar({ active, ready = true }) {
                 className="absolute bottom-0 left-1/2 h-full w-auto max-w-none -translate-x-1/2 object-contain select-none drop-shadow-[0_24px_40px_rgba(27,26,22,0.18)]"
               />
             </AnimatePresence>
+
+            {/* subtle blink — skin-matched eyelids drop briefly every few seconds */}
+            {entered && (
+              <div className="absolute bottom-0 left-1/2 -translate-x-1/2 h-full pointer-events-none" style={{ aspectRatio: "366 / 1099" }}>
+                <Lid x={EYES.left.x} y={EYES.left.y} w={EYES.w} h={EYES.h} delay={0} />
+                <Lid x={EYES.right.x} y={EYES.right.y} w={EYES.w} h={EYES.h} delay={0.03} />
+              </div>
+            )}
 
             <motion.span
               initial={{ opacity: 0, y: 8 }}
