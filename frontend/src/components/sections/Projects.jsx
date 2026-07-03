@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Maximize2, Minimize2, ArrowUpRight, X, ExternalLink, Github, ChevronLeft, ChevronRight } from "lucide-react";
+import { Maximize2, Minimize2, ArrowUpRight, X, ExternalLink, Github } from "lucide-react";
 import { PROJECTS } from "../../data/portfolio";
 
 const N = PROJECTS.length;
@@ -66,12 +66,6 @@ export default function Projects() {
     return () => cancelAnimationFrame(raf);
   }, [paused, selected, inView, fs, autoPlay]);
 
-  // rotate one project step; disables auto-rotate
-  const step = (dir) => {
-    setAutoPlay(false);
-    setAngle((a) => a - dir * THETA);
-  };
-
   const onDown = (e) => {
     dragging.current = true;
     moved.current = 0;
@@ -91,7 +85,7 @@ export default function Projects() {
   const StageInner = (
     <div
       className="relative select-none"
-      style={{ height: dims.cardH + 110, perspective: 1100 }}
+      style={{ height: dims.cardH + 50, perspective: 1100 }}
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => { setPaused(false); onUp(); }}
       onMouseDown={onDown}
@@ -126,7 +120,7 @@ export default function Projects() {
                 opacity,
                 pointerEvents: front > -0.5 ? "auto" : "none",
               }}
-              onClick={() => { if (moved.current < 6) setSelected(p); }}
+              onClick={() => { if (moved.current < 6) window.open(p.link, "_blank", "noopener,noreferrer"); }}
               data-testid={`project-card-${i}`}
             >
               <div
@@ -167,16 +161,6 @@ export default function Projects() {
       >
         {fs ? <Minimize2 className="w-4 h-4" /> : <Maximize2 className="w-4 h-4" />}
       </button>
-
-      {/* prev / next controls */}
-      <div className="absolute left-1/2 -translate-x-1/2 bottom-0 z-10 flex items-center gap-4">
-        <button onClick={() => step(-1)} data-testid="project-prev" aria-label="Previous project" className="p-3 rounded-full bg-[#F7F4ED] border border-[rgba(27,26,22,0.15)] text-[#1B1A16] hover:bg-[#1B1A16] hover:text-[#EFEBE3] transition-colors shadow-sm">
-          <ChevronLeft className="w-4 h-4" />
-        </button>
-        <button onClick={() => step(1)} data-testid="project-next" aria-label="Next project" className="p-3 rounded-full bg-[#F7F4ED] border border-[rgba(27,26,22,0.15)] text-[#1B1A16] hover:bg-[#1B1A16] hover:text-[#EFEBE3] transition-colors shadow-sm">
-          <ChevronRight className="w-4 h-4" />
-        </button>
-      </div>
     </div>
   );
 
@@ -188,7 +172,7 @@ export default function Projects() {
           <h2 className="font-serif-display font-light text-4xl sm:text-5xl lg:text-6xl text-[#1B1A16] leading-tight">
             A rotating gallery of <span className="italic text-[#BF5537]">things I've built</span>.
           </h2>
-          <p className="text-[#6E685B] text-sm mt-4 font-mono-accent tracking-wide">Drag to spin · click a card to focus/open · ‹ › to browse · ⤢ expand</p>
+          <p className="text-[#6E685B] text-sm mt-4 font-mono-accent tracking-wide">Drag to spin · click a card to visit the project · ⤢ expand</p>
         </div>
 
         {/* inline stage (fixed height/width feel) */}
