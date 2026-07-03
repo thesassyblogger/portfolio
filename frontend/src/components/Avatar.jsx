@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { motion, AnimatePresence, useMotionValue, useSpring, useTransform } from "framer-motion";
 import { AVATARS } from "../data/portfolio";
 
@@ -33,12 +33,30 @@ export default function Avatar({ active }) {
   const driftY = useTransform(sy, (v) => v * 12);
 
   useEffect(() => {
+    const lastMove = { t: Date.now() };
     const onMove = (e) => {
+      lastMove.t = Date.now();
       mx.set(e.clientX / window.innerWidth - 0.5);
       my.set(e.clientY / window.innerHeight - 0.5);
     };
     window.addEventListener("mousemove", onMove);
-    return () => window.removeEventListener("mousemove", onMove);
+
+    // idle gaze-drift: when the cursor is still, she gently looks around on her own
+    let raf;
+    const loop = () => {
+      if (Date.now() - lastMove.t > 2200) {
+        const t = Date.now() / 1000;
+        mx.set(Math.sin(t * 0.55) * 0.26);
+        my.set(Math.sin(t * 0.85 + 1.2) * 0.11 - 0.03);
+      }
+      raf = requestAnimationFrame(loop);
+    };
+    raf = requestAnimationFrame(loop);
+
+    return () => {
+      window.removeEventListener("mousemove", onMove);
+      cancelAnimationFrame(raf);
+    };
   }, [mx, my]);
 
   return (
@@ -72,8 +90,13 @@ export default function Avatar({ active }) {
           transition={{ duration: 1.6, delay: 0.25, ease: [0.22, 1, 0.36, 1], times: [0, 0.75, 1] }}
         />
 
-        {/* float loop */}
-        <div className="relative h-full w-full animate-floaty">
+        {/* natural weight-shift sway + subtle breathing (idle life) */}
+        <motion.div
+          className="relative h-full w-full animate-floaty"
+          animate={{ rotate: [0, -1.1, 0, 1.1, 0], x: [0, -5, 0, 5, 0], scaleY: [1, 1, 0.992, 1, 1] }}
+          transition={{ duration: 9, repeat: Infinity, ease: "easeInOut", times: [0, 0.25, 0.5, 0.75, 1] }}
+          style={{ transformOrigin: "center bottom" }}
+        >
           {/* live cursor-follow head tracking (applies on every section) */}
           <motion.div
             className="relative h-full w-full"
@@ -112,7 +135,7 @@ export default function Avatar({ active }) {
               {state.tag}
             </motion.span>
           </motion.div>
-        </div>
+        </motion.div>
       </motion.div>
     </div>
   );
