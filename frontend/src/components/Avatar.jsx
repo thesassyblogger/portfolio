@@ -6,11 +6,11 @@ import { AVATARS } from "../data/portfolio";
 // The whole figure turns/leans toward the cursor everywhere — she feels alive.
 const STATES = {
   Home: { src: AVATARS.hero, side: "center", scale: 1, tag: "Hello, I'm Mansi" },
-  About: { src: AVATARS.wave, side: "left", scale: 0.98, tag: "A little about me" },
-  Skills: { src: AVATARS.coding, side: "right", scale: 1.0, tag: "Building, always" },
-  Work: { src: AVATARS.present, side: "left", scale: 0.98, tag: "My journey" },
-  Projects: { src: AVATARS.present, side: "left", scale: 0.82, tag: "Take a look" },
-  Contact: { src: AVATARS.wave, side: "right", scale: 0.98, tag: "Let's talk" },
+  About: { src: AVATARS.hero, side: "left", scale: 0.98, tag: "A little about me" },
+  Skills: { src: AVATARS.hero, side: "right", scale: 1.0, tag: "Building, always" },
+  Work: { src: AVATARS.hero, side: "left", scale: 0.98, tag: "My journey" },
+  Projects: { src: AVATARS.hero, side: "left", scale: 0.82, tag: "Take a look" },
+  Contact: { src: AVATARS.hero, side: "right", scale: 0.98, tag: "Let's talk" },
 };
 
 const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
