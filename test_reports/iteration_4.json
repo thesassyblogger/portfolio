@@ -1,0 +1,20 @@
+{
+  "summary": "Bug-fix verification for Projects rotating 3D cylinder. Both reported issues resolved: (1) side cards are clickable (pointerEvents='auto' whenever front>-0.5) and open the correct detail modal; (2) inline stage box and fullscreen wrapper have overflow:visible so cards are no longer clipped at container edges. Fullscreen toggle, body scroll lock, drag/hover, images, and responsive layout (1440/1280/390) all verified.",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": [],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "Mobile (390px): side cards can render slightly outside the container box (e.g., card left = -3px, -11px) because the surrounding section still uses overflow-hidden which visually clips them at the viewport edge. Not the reported bug (they don't look 'half cut' at the gallery box edges — they overflow the section). Consider slightly increasing radius reduction on <640px if further polish is desired."
+  ],
+  "updated_files": [],
+  "success_rate": {"backend": "N/A (skipped)", "frontend": "100%"},
+  "seed_data_creation": "None",
+  "retest_needed": false,
+  "should_main_agent_self_test": true,
+  "context_for_next_testing_agent": "Projects cylinder bug fixes verified end-to-end. Side card at idx=1 (right side, centerX~976 vs stageCx~720) opened modal with correct link (sunflower project on mobile, mango on desktop). Stage + fullscreen wrapper have overflow:visible; container/stage widths fit within viewport (1440 sw=cw=1440, 1280 sw=cw=1280, 390 sw=cw=390). Fullscreen sets body.overflow=hidden and clears on close. No dev overlay errors."
+}

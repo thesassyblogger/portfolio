@@ -44,7 +44,7 @@ export default function Projects() {
       else if (w < 1024) { cardW = 210; cardH = 290; }
       else { cardW = fs ? 300 : 250; cardH = fs ? 400 : 330; }
       const need = (cardW / 2) / Math.tan(Math.PI / N);
-      const radius = Math.round(Math.max(need * 1.15, cardW * 1.35) + (fs ? 120 : 40));
+      const radius = Math.round(Math.max(need * 1.1, cardW * 1.25) + (fs ? 90 : 26));
       setDims({ cardW, cardH, radius });
     };
     compute();
@@ -117,9 +117,9 @@ export default function Projects() {
               style={{
                 transform: `rotateY(${i * THETA}deg) translateZ(${dims.radius}px)`,
                 opacity,
-                pointerEvents: front > 0.2 ? "auto" : "none",
+                pointerEvents: front > -0.5 ? "auto" : "none",
               }}
-              onClick={() => isFront && openCard(p)}
+              onClick={() => openCard(p)}
               data-testid={`project-card-${i}`}
             >
               <div
@@ -176,7 +176,7 @@ export default function Projects() {
 
         {/* inline stage (fixed height/width feel) */}
         {!fs && (
-          <div className="rounded-2xl border border-[rgba(27,26,22,0.12)] bg-[#EFEBE3]/40 backdrop-blur-sm py-8 overflow-hidden">
+          <div className="rounded-2xl border border-[rgba(27,26,22,0.12)] bg-[#EFEBE3]/40 backdrop-blur-sm py-8">
             {StageInner}
           </div>
         )}
@@ -190,7 +190,7 @@ export default function Projects() {
             className="fixed inset-0 z-[80] flex items-center justify-center bg-[#EFEBE3] overflow-hidden"
             data-testid="project-fullscreen-overlay"
           >
-            <div className="w-full max-w-6xl px-6 overflow-hidden">{StageInner}</div>
+            <div className="w-full px-4">{StageInner}</div>
           </motion.div>
         )}
       </AnimatePresence>
