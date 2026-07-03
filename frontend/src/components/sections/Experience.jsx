@@ -40,6 +40,9 @@ export default function Experience() {
                     <span className="absolute inset-0 rounded-full bg-[#BF5537] animate-ping opacity-40" />
                   </span>
 
+                  {/* large faint index */}
+                  <span className="pointer-events-none absolute right-5 top-3 font-serif-display text-6xl sm:text-7xl leading-none text-[#1B1A16]/[0.06] group-hover:text-[#BF5537]/10 transition-colors">0{i + 1}</span>
+
                   <div className="flex items-start justify-between gap-4">
                     <div>
                       <h3 className="font-serif-display text-2xl sm:text-3xl text-[#1B1A16]">{exp.role}</h3>

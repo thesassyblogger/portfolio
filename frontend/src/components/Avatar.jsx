@@ -10,6 +10,8 @@ const STATES = {
   Skills: { src: AVATARS.coding, side: "right", scale: 1.0, tag: "Building, always" },
   Work: { src: AVATARS.present, side: "left", scale: 0.98, tag: "My journey" },
   Projects: { src: AVATARS.present, side: "left", scale: 0.82, tag: "Take a look" },
+  Travel: { src: AVATARS.wave, side: "right", scale: 0.7, tag: "Wanderlust" },
+  Style: { src: AVATARS.present, side: "left", scale: 0.7, tag: "After hours" },
   Contact: { src: AVATARS.wave, side: "right", scale: 0.98, tag: "Let's talk" },
 };
 

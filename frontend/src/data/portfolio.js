@@ -147,4 +147,56 @@ export const CERTS = [
   "Git & GitHub — IBM",
 ];
 
-export const NAV = ["Home", "About", "Skills", "Work", "Projects", "Contact"];
+// Travel — places that shaped me (horizontal sticky gallery)
+export const TRAVEL = [
+  {
+    place: "Mumbai",
+    country: "India",
+    tag: "01 · Origin",
+    note: "The chaos that taught me pace, hustle and heart.",
+    img: "https://images.unsplash.com/photo-1653299311171-31939b3b84b0?w=1400&q=80&auto=format&fit=crop",
+  },
+  {
+    place: "Regina",
+    country: "Canada",
+    tag: "02 · Home base",
+    note: "Wide-open calm — the quiet where I do my best building.",
+    img: "https://images.pexels.com/photos/36088805/pexels-photo-36088805.jpeg?auto=compress&cs=tinysrgb&w=1400",
+  },
+  {
+    place: "Saskatchewan",
+    country: "Prairies",
+    tag: "03 · Backyard",
+    note: "Big sky, bigger plans — my thinking space.",
+    img: "https://images.pexels.com/photos/35698177/pexels-photo-35698177.jpeg?auto=compress&cs=tinysrgb&w=1400",
+  },
+  {
+    place: "Kyoto",
+    country: "Japan",
+    tag: "04 · On the list",
+    note: "Design, distilled. Restraint as a superpower.",
+    img: "https://images.pexels.com/photos/37402015/pexels-photo-37402015.jpeg?auto=compress&cs=tinysrgb&w=1400",
+  },
+  {
+    place: "Cam Ranh",
+    country: "Vietnam",
+    tag: "05 · Dreaming",
+    note: "Slow coasts, fast ideas — where I want to write next.",
+    img: "https://images.pexels.com/photos/31312494/pexels-photo-31312494.jpeg?auto=compress&cs=tinysrgb&w=1400",
+  },
+];
+
+// Style / off-hours — an eye for detail that flows back into the work
+export const STYLE = {
+  quote: "Style is just system design for the self.",
+  blurb:
+    "Off the keyboard, I obsess over neutral palettes, sharp tailoring and the details most people miss — the same instinct I bring to interfaces and infrastructure.",
+  images: [
+    { src: "https://images.unsplash.com/photo-1668952135120-7d997b1b3778?w=1000&q=80&auto=format&fit=crop", caption: "Neutral palette · sharp tailoring" },
+    { src: "https://images.unsplash.com/photo-1613915617430-8ab0fd7c6baf?w=1000&q=80&auto=format&fit=crop", caption: "Structure over noise" },
+    { src: "https://images.unsplash.com/photo-1571513800374-df1bbe650e56?w=1000&q=80&auto=format&fit=crop", caption: "Warmth in the details" },
+    { src: "https://images.unsplash.com/photo-1549298222-1c31e8915347?w=1000&q=80&auto=format&fit=crop", caption: "Editorial, always" },
+  ],
+};
+
+export const NAV = ["Home", "About", "Skills", "Work", "Projects", "Travel", "Style", "Contact"];

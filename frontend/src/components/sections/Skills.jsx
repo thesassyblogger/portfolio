@@ -40,26 +40,31 @@ export default function Skills() {
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: gi * 0.08 }}
                 data-testid={`skill-group-${gi}`}
-                className="border-b border-[rgba(27,26,22,0.14)]"
+                className="relative border-b border-[rgba(27,26,22,0.14)]"
               >
-                <button
+                {/* growing left accent bar when open */}
+                <motion.span animate={{ scaleY: open ? 1 : 0 }} transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }} className="absolute left-0 top-0 bottom-0 w-[3px] bg-[#BF5537] origin-top" />
+                <motion.button
                   onClick={() => setOpenIdx(open ? -1 : gi)}
-                  className="w-full flex items-center justify-between py-6 group text-left"
+                  whileHover={{ x: 10 }}
+                  className="w-full flex items-center justify-between py-6 group text-left pl-4"
                   data-cursor="hover"
+                  data-testid={`skill-accordion-toggle-${gi}`}
                 >
                   <div className="flex items-baseline gap-4">
                     <span className="font-mono-accent text-[11px] text-[#BF5537]">0{gi + 1}</span>
                     <h3 className={`font-serif-display text-3xl sm:text-4xl transition-colors ${open ? "text-[#BF5537]" : "text-[#1B1A16] group-hover:text-[#BF5537]"}`}>{group.label}</h3>
+                    <span className="font-mono-accent text-[10px] tracking-[0.1em] uppercase text-[#9a9384] hidden sm:inline">{group.items.length} tools</span>
                   </div>
                   <span className="font-mono-accent text-2xl text-[#1B1A16] transition-transform duration-300" style={{ transform: open ? "rotate(45deg)" : "none" }}>+</span>
-                </button>
+                </motion.button>
                 <motion.div
                   initial={false}
                   animate={{ height: open ? "auto" : 0, opacity: open ? 1 : 0 }}
                   transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
                   className="overflow-hidden"
                 >
-                  <div className="pb-7 flex flex-wrap gap-2">
+                  <div className="pb-7 pl-4 flex flex-wrap gap-2">
                     {group.items.map((item, ii) => (
                       <motion.span
                         key={item}
