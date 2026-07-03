@@ -123,6 +123,7 @@ export const PROJECTS = [
     desc: "A production-grade Node app with an automated CI/CD pipeline — from commit to containerized, production-ready deployment.",
     link: "https://github.com/thesassyblogger/node-todo-cicd",
     live: false,
+    image: "/projects/aws.jpg",
     hue: "#7A4A5A",
   },
   {
