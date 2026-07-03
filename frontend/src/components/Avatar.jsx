@@ -1,9 +1,9 @@
-import React, { useEffect, useRef, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import React, { useEffect } from "react";
+import { motion, AnimatePresence, useMotionValue, useSpring, useTransform } from "framer-motion";
 import { AVATARS } from "../data/portfolio";
 
 // One consistent character; poses crossfade in place (no vanish/replace).
-// On Home she subtly tilts to follow the cursor.
+// Her head follows the cursor everywhere — she feels alive & interactive.
 const STATES = {
   Home: { src: AVATARS.hero, side: "center", scale: 1, tag: "Hello, I'm Mansi" },
   About: { src: AVATARS.wave, side: "left", scale: 0.98, tag: "A little about me" },
@@ -19,18 +19,27 @@ export default function Avatar({ active }) {
   const state = STATES[active] || STATES.Home;
   const side = state.side;
   const isCenter = side === "center";
-  const [tilt, setTilt] = useState({ rx: 0, ry: 0 });
+
+  // live cursor tracking (normalized -0.5..0.5), smoothed with springs
+  const mx = useMotionValue(0);
+  const my = useMotionValue(0);
+  const spring = { stiffness: 120, damping: 18, mass: 0.5 };
+  const sx = useSpring(mx, spring);
+  const sy = useSpring(my, spring);
+
+  const rotateY = useTransform(sx, (v) => v * 34); // head turns toward cursor
+  const rotateX = useTransform(sy, (v) => -v * 20); // head tilts up/down
+  const driftX = useTransform(sx, (v) => v * 22); // subtle parallax
+  const driftY = useTransform(sy, (v) => v * 12);
 
   useEffect(() => {
-    if (active !== "Home") { setTilt({ rx: 0, ry: 0 }); return; }
     const onMove = (e) => {
-      const nx = e.clientX / window.innerWidth - 0.5;
-      const ny = e.clientY / window.innerHeight - 0.5;
-      setTilt({ ry: nx * 16, rx: -ny * 10 });
+      mx.set(e.clientX / window.innerWidth - 0.5);
+      my.set(e.clientY / window.innerHeight - 0.5);
     };
     window.addEventListener("mousemove", onMove);
     return () => window.removeEventListener("mousemove", onMove);
-  }, [active]);
+  }, [mx, my]);
 
   return (
     <div
@@ -47,23 +56,35 @@ export default function Avatar({ active }) {
         perspective: 1200,
       }}
     >
-      {/* entrance */}
+      {/* unique entrance: she materializes feet-first through a scan sweep, blur → sharp */}
       <motion.div
         className="relative h-full w-full"
-        initial={{ opacity: 0, y: 100, scale: 0.9 }}
-        animate={{ opacity: 1, y: 0, scale: 1 }}
-        transition={{ duration: 1.1, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
+        initial={{ clipPath: "inset(100% 0 0 0)", filter: "blur(14px)", scale: 1.08, opacity: 0 }}
+        animate={{ clipPath: "inset(0% 0 0 0)", filter: "blur(0px)", scale: 1, opacity: 1 }}
+        transition={{ duration: 1.5, delay: 0.25, ease: [0.22, 1, 0.36, 1] }}
       >
+        {/* terracotta scan line that rises with the reveal */}
+        <motion.div
+          className="absolute left-0 right-0 h-[3px] z-30 pointer-events-none"
+          style={{ background: "linear-gradient(90deg, transparent, #BF5537, transparent)", boxShadow: "0 0 22px 6px rgba(191,85,55,0.55)" }}
+          initial={{ top: "100%", opacity: 0 }}
+          animate={{ top: ["100%", "0%", "0%"], opacity: [0, 1, 0] }}
+          transition={{ duration: 1.6, delay: 0.25, ease: [0.22, 1, 0.36, 1], times: [0, 0.75, 1] }}
+        />
+
         {/* float loop */}
         <div className="relative h-full w-full animate-floaty">
-          {/* cursor tilt */}
-          <div
+          {/* live cursor-follow head tracking (applies on every section) */}
+          <motion.div
             className="relative h-full w-full"
             style={{
-              transform: `rotateX(${tilt.rx}deg) rotateY(${tilt.ry}deg) scale(${state.scale})`,
+              rotateX,
+              rotateY,
+              x: driftX,
+              y: driftY,
+              scale: state.scale,
               transformStyle: "preserve-3d",
-              transition: "transform 0.35s ease-out",
-              transformOrigin: "center bottom",
+              transformOrigin: "center 42%",
             }}
           >
             <div className="absolute left-1/2 -translate-x-1/2 bottom-4 w-[55%] h-6 rounded-full blur-xl" style={{ background: "rgba(27,26,22,0.2)" }} />
@@ -82,10 +103,15 @@ export default function Avatar({ active }) {
               />
             </AnimatePresence>
 
-            <span className="font-mono-accent absolute -top-1 left-1/2 -translate-x-1/2 whitespace-nowrap text-[10px] tracking-[0.2em] uppercase text-[#BF5537] bg-[#F7F4ED]/80 backdrop-blur px-3 py-1 rounded-full border border-[rgba(27,26,22,0.12)]">
+            <motion.span
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 1.6 }}
+              className="font-mono-accent absolute -top-1 left-1/2 -translate-x-1/2 whitespace-nowrap text-[10px] tracking-[0.2em] uppercase text-[#BF5537] bg-[#F7F4ED]/80 backdrop-blur px-3 py-1 rounded-full border border-[rgba(27,26,22,0.12)]"
+            >
               {state.tag}
-            </span>
-          </div>
+            </motion.span>
+          </motion.div>
         </div>
       </motion.div>
     </div>
