@@ -134,6 +134,7 @@ export const PROJECTS = [
     desc: "An automated GitOps pipeline provisioning VPCs, IAM and EKS with security quality gates and Prometheus/Grafana observability.",
     link: "https://github.com/thesassyblogger/DevopsProject2",
     live: false,
+    image: "/projects/pipeline.jpg",
     hue: "#3E6B57",
   },
 ];
