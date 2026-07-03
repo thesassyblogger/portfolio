@@ -11,8 +11,6 @@ import About from "@/components/sections/About";
 import Skills from "@/components/sections/Skills";
 import Experience from "@/components/sections/Experience";
 import Projects from "@/components/sections/Projects";
-import Travel from "@/components/sections/Travel";
-import Style from "@/components/sections/Style";
 import Contact from "@/components/sections/Contact";
 import Footer from "@/components/sections/Footer";
 
@@ -22,8 +20,6 @@ const SECTION_MAP = [
   ["skills", "Skills"],
   ["work", "Work"],
   ["projects", "Projects"],
-  ["travel", "Travel"],
-  ["style", "Style"],
   ["contact", "Contact"],
 ];
 
@@ -65,8 +61,6 @@ function App() {
         <Skills />
         <Experience />
         <Projects />
-        <Travel />
-        <Style />
         <Contact />
         <Footer />
       </main>
