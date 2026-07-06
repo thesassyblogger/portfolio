@@ -47,6 +47,20 @@ Per user feedback the dark space theme hurt readability; redesigned to a LIGHT n
 - P2: Pause WebGL RAF on tab hidden; replace deprecated THREE.Clock; add rate limiting/captcha on contact.
 - P2: Downloadable resume button; SEO/OG meta tags for shareability.
 
+## Iteration 5 — Real WebGL 3D Avatar + résumé + fixes (2026-07-06)
+- Replaced the 2D PNG avatar with a genuine real-time **WebGL 3D rigged model** (@react-three/fiber + three.js, GLTFLoader). Model: three.js Xbot (`/public/models/avatar.glb`), tinted to a warm bronze/terracotta "sculpture" matching the editorial palette, lit with RoomEnvironment + directional/hemisphere lights.
+  - Cursor-follow rotation (true 3D), looping idle animation ("agree" nod on About/Contact), per-section positioning (center/left/right), hidden on Skills, entrance fade after preloader, tag bubbles.
+  - NOTE: Ready Player Me shut down (Jan 31 2026, DNS dead) so it's a GENERIC rigged figure per user choice, not a likeness. Swap `/public/models/avatar.glb` with any rigged `.glb` to change it.
+- Skills accordion: multiple groups can now stay open independently (Set-based state).
+- Added **Résumé download** button (navbar desktop + mobile); generated `/public/mansi-patel-resume.pdf` from site data (reportlab). Swap the PDF anytime.
+- Single consistent avatar likeness era (earlier iteration) is superseded by the 3D model. Old pose PNGs (`pose_wave/arms/present.png`, hero.png) now unused but retained.
+
+## Backlog / Next
+- P1: If a matching `.glb` likeness becomes available (MetaPerson / 3D artist), swap it into Avatar.jsx model path.
+- P1: Replace résumé placeholder PDF with Mansi's official résumé.
+- P2: Pause WebGL render loop when tab hidden / avatar off-screen for perf.
+- P2: Admin view + email notifications for contact messages; SEO/OG meta tags.
+
 ## Iteration 4 — Loading Animation + Travel & Style (2026-07-03)
 - New unique Preloader: scattered serif letters spring-assemble into "MANSI PATEL" inside a progress ring, then vertical panels sweep up to reveal the site (skippable via ?fast). Verified working.
 - Re-added TRAVEL section: horizontal sticky-scroll gallery (Mumbai, Regina, Saskatchewan, Kyoto, Cam Ranh) with parallax image cards + location typography overlays. (05) — Travel.
