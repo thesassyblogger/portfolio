@@ -7,7 +7,7 @@ import { AVATARS } from "../data/portfolio";
 const STATES = {
   Home: { src: AVATARS.hero, side: "center", scale: 1, tag: "Hello, I'm Mansi", blink: true },
   About: { src: AVATARS.wave, side: "left", scale: 0.98, tag: "A little about me" },
-  Skills: { src: AVATARS.arms, side: "right", scale: 1.0, tag: "Building, always" },
+  Skills: { src: AVATARS.arms, side: "right", scale: 1.0, tag: "Building, always", hide: true },
   Work: { src: AVATARS.present, side: "left", scale: 0.96, tag: "My journey" },
   Projects: { src: AVATARS.present, side: "left", scale: 0.82, tag: "Take a look" },
   Contact: { src: AVATARS.wave, side: "right", scale: 0.98, tag: "Let's talk" },
@@ -109,8 +109,9 @@ export default function Avatar({ active, ready = true }) {
         left: side === "right" ? "auto" : side === "center" ? "50%" : "2vw",
         right: side === "right" ? "2vw" : "auto",
         transform: isCenter ? "translateX(-50%)" : "none",
-        transition: "left 1s cubic-bezier(0.22,1,0.36,1), right 1s cubic-bezier(0.22,1,0.36,1)",
+        transition: "left 1s cubic-bezier(0.22,1,0.36,1), right 1s cubic-bezier(0.22,1,0.36,1), opacity 0.6s ease",
         perspective: 1200,
+        opacity: state.hide ? 0 : 1,
       }}
     >
       {/* one-time entrance reveal (after preloader) */}

@@ -5,7 +5,13 @@ import { SKILL_GROUPS } from "../../data/portfolio";
 const MARQUEE = ["REACT", "NODE", "AWS", "KUBERNETES", "TERRAFORM", "DOCKER", "SPRING BOOT", "MONGODB", "GRAPHQL", "PYTHON", "CI/CD", "THREE.JS"];
 
 export default function Skills() {
-  const [openIdx, setOpenIdx] = useState(0);
+  const [openSet, setOpenSet] = useState(() => new Set([0]));
+  const toggle = (gi) =>
+    setOpenSet((prev) => {
+      const n = new Set(prev);
+      n.has(gi) ? n.delete(gi) : n.add(gi);
+      return n;
+    });
 
   return (
     <section id="skills" data-testid="skills-section" className="relative py-28 lg:py-40 overflow-hidden">
@@ -31,7 +37,7 @@ export default function Skills() {
         {/* interactive accordion-style list — unique, editorial */}
         <div className="lg:mr-[30%] border-t border-[rgba(27,26,22,0.14)]">
           {SKILL_GROUPS.map((group, gi) => {
-            const open = openIdx === gi;
+            const open = openSet.has(gi);
             return (
               <motion.div
                 key={group.label}
@@ -45,7 +51,7 @@ export default function Skills() {
                 {/* growing left accent bar when open */}
                 <motion.span animate={{ scaleY: open ? 1 : 0 }} transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }} className="absolute left-0 top-0 bottom-0 w-[3px] bg-[#BF5537] origin-top" />
                 <motion.button
-                  onClick={() => setOpenIdx(open ? -1 : gi)}
+                  onClick={() => toggle(gi)}
                   whileHover={{ x: 10 }}
                   className="w-full flex items-center justify-between py-6 group text-left pl-4"
                   data-cursor="hover"
