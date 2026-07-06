@@ -41,17 +41,14 @@ function Model({ pointer, scale, clip }) {
   // premium polished terracotta-ceramic sculpture finish
   useEffect(() => {
     const mat = new THREE.MeshPhysicalMaterial({
-      color: new THREE.Color("#c76f49"),
-      roughness: 0.3,
-      metalness: 0.0,
-      clearcoat: 0.9,
-      clearcoatRoughness: 0.28,
-      sheen: 0.5,
-      sheenColor: new THREE.Color("#e8a06a"),
-      sheenRoughness: 0.5,
-      emissive: new THREE.Color("#3a1206"),
-      emissiveIntensity: 0.06,
-      envMapIntensity: 1.15,
+      color: new THREE.Color("#141110"),
+      roughness: 0.16,
+      metalness: 0.1,
+      clearcoat: 1.0,
+      clearcoatRoughness: 0.08,
+      emissive: new THREE.Color("#1a0a04"),
+      emissiveIntensity: 0.04,
+      envMapIntensity: 1.4,
     });
     gltf.scene.traverse((o) => {
       if (o.isMesh) {
@@ -156,15 +153,16 @@ export default function Avatar({ active, ready = true }) {
         style={{ background: "transparent" }}
       >
         <EnvSetup />
-        <ambientLight intensity={0.35} />
-        <hemisphereLight args={["#fff6ea", "#2a1c12", 0.45]} />
-        {/* warm key */}
-        <directionalLight position={[4, 6, 4]} intensity={1.7} color="#fff1dd" />
-        {/* terracotta rim / back glow for a sculpted edge */}
-        <directionalLight position={[-5, 3, -3]} intensity={1.2} color="#BF5537" />
-        <directionalLight position={[0, 4, -6]} intensity={0.9} color="#ffd7ac" />
+        <ambientLight intensity={0.22} />
+        <hemisphereLight args={["#fff6ea", "#0c0a08", 0.3]} />
+        {/* cool key for glossy highlights */}
+        <directionalLight position={[4, 6, 4]} intensity={1.5} color="#ffffff" />
+        {/* strong terracotta rim / back glow for a warm sculpted edge */}
+        <directionalLight position={[-5, 3, -3]} intensity={2.2} color="#BF5537" />
+        <directionalLight position={[5, 2, -4]} intensity={1.4} color="#E5A27F" />
+        <directionalLight position={[0, 4, -6]} intensity={1.0} color="#ffb98a" />
         {/* soft top accent */}
-        <spotLight position={[0, 8, 3]} angle={0.5} penumbra={0.9} intensity={1.3} color="#ffffff" />
+        <spotLight position={[0, 8, 3]} angle={0.5} penumbra={0.9} intensity={1.4} color="#ffffff" />
         <Suspense fallback={null}>
           <Model pointer={pointer} scale={state.scale} clip={state.clip} />
         </Suspense>
