@@ -47,9 +47,14 @@ export default function Navbar({ active }) {
           ))}
         </div>
 
-        <a href={PROFILE.github} target="_blank" rel="noreferrer" data-testid="nav-github-cta" className="hidden md:inline-flex font-mono-accent text-xs tracking-[0.15em] uppercase border border-[rgba(27,26,22,0.3)] px-4 py-2 hover:bg-[#1B1A16] hover:text-[#EFEBE3] transition-colors">
-          GitHub
-        </a>
+        <div className="hidden md:flex items-center gap-3">
+          <a href="/mansi-patel-resume.pdf" download data-testid="nav-resume-cta" className="inline-flex items-center font-mono-accent text-xs tracking-[0.15em] uppercase bg-[#BF5537] text-[#F7F4ED] px-4 py-2 hover:bg-[#1B1A16] transition-colors">
+            Résumé
+          </a>
+          <a href={PROFILE.github} target="_blank" rel="noreferrer" data-testid="nav-github-cta" className="inline-flex font-mono-accent text-xs tracking-[0.15em] uppercase border border-[rgba(27,26,22,0.3)] px-4 py-2 hover:bg-[#1B1A16] hover:text-[#EFEBE3] transition-colors">
+            GitHub
+          </a>
+        </div>
 
         <button className="md:hidden text-[#1B1A16] font-mono-accent text-xs uppercase tracking-wider" onClick={() => setOpen((v) => !v)} data-testid="nav-mobile-toggle">
           {open ? "Close" : "Menu"}
@@ -64,6 +69,9 @@ export default function Navbar({ active }) {
                 {item}
               </button>
             ))}
+            <a href="/mansi-patel-resume.pdf" download data-testid="nav-mobile-resume-cta" className="font-mono-accent text-left text-sm tracking-[0.15em] uppercase text-[#BF5537]">
+              Download Résumé ↓
+            </a>
           </div>
         </motion.div>
       )}
