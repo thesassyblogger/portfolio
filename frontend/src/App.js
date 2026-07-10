@@ -9,15 +9,20 @@ import Navbar from "@/components/Navbar";
 import Hero from "@/components/sections/Hero";
 import About from "@/components/sections/About";
 import Skills from "@/components/sections/Skills";
+import ScrollMotion from "@/components/sections/ScrollMotion";
 import Experience from "@/components/sections/Experience";
 import Projects from "@/components/sections/Projects";
 import Contact from "@/components/sections/Contact";
 import Footer from "@/components/sections/Footer";
+import ScrollFX from "@/components/ScrollFX";
+import useAssetPreload from "@/hooks/useAssetPreload";
+import useReducedMotion from "@/hooks/useReducedMotion";
 
 const SECTION_MAP = [
   ["home", "Home"],
   ["about", "About"],
   ["skills", "Skills"],
+  ["motion", "Motion"],
   ["work", "Work"],
   ["projects", "Projects"],
   ["contact", "Contact"],
@@ -27,6 +32,8 @@ function App() {
   const [active, setActive] = useState("Home");
   const skipPreload = typeof window !== "undefined" && new URLSearchParams(window.location.search).has("fast");
   const [loaded, setLoaded] = useState(skipPreload);
+  const reducedMotion = useReducedMotion();
+  const { progress: preloadProgress, ready: assetsReady } = useAssetPreload(!skipPreload);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -47,18 +54,38 @@ function App() {
     return () => observer.disconnect();
   }, [loaded]);
 
+  useEffect(() => {
+    if (!loaded || typeof window === "undefined" || !window.location.hash) return undefined;
+    const target = window.location.hash.replace("#", "");
+    let attempts = 0;
+    const timers = [];
+    const scrollToHash = () => {
+      const el = document.getElementById(target);
+      if (el) {
+        el.scrollIntoView({ behavior: "auto", block: "start" });
+        return;
+      }
+      attempts += 1;
+      if (attempts < 20) timers.push(window.setTimeout(scrollToHash, 80));
+    };
+    [100, 700, 1400].forEach((delay) => timers.push(window.setTimeout(scrollToHash, delay)));
+    return () => timers.forEach((timer) => window.clearTimeout(timer));
+  }, [loaded]);
+
   return (
     <div className="App grain relative min-h-screen">
       <CustomCursor />
-      {!skipPreload && <Preloader onDone={() => setLoaded(true)} />}
+      {!skipPreload && <Preloader progress={preloadProgress} assetsReady={assetsReady} reducedMotion={reducedMotion} onDone={() => setLoaded(true)} />}
       <AmbientBackground />
       <Navbar active={active} />
-      <Avatar active={active} ready={loaded} />
+      <Avatar active={active} ready={loaded} reducedMotion={reducedMotion} />
+      <ScrollFX ready={loaded} reducedMotion={reducedMotion} />
 
       <main className="relative z-10">
-        <Hero />
+        <Hero ready={loaded} reducedMotion={reducedMotion} />
         <About />
         <Skills />
+        <ScrollMotion reducedMotion={reducedMotion} />
         <Experience />
         <Projects />
         <Contact />

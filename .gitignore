@@ -31,7 +31,10 @@ dist/
 dist
 
 # Environment files (comprehensive coverage)
-
+.env
+.env.*
+**/.env
+**/.env.*
 *token.json*
 *credentials.json*
 
@@ -84,3 +87,4 @@ frontend/node_modules/.cache/default-development/6.pack
 frontend/node_modules/.cache/default-development/3.pack
 frontend/node_modules/.cache/default-development/12.pack
 frontend/node_modules/.cache/default-development/15.pack
+frontend/node_modules/.cache/default-development/13.pack

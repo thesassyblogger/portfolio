@@ -30,11 +30,11 @@ export default function Projects() {
     return () => io.disconnect();
   }, []);
 
-  // lock page scroll while fullscreen overlay is open
+  // lock page scroll while fullscreen overlay or case study is open
   useEffect(() => {
-    document.body.style.overflow = fs ? "hidden" : "";
+    document.body.style.overflow = fs || selected ? "hidden" : "";
     return () => { document.body.style.overflow = ""; };
-  }, [fs]);
+  }, [fs, selected]);
 
   // responsive sizing
   useEffect(() => {
@@ -81,6 +81,15 @@ export default function Projects() {
     setAngle((a) => a + dx * 0.28);
   };
   const onUp = () => { dragging.current = false; };
+  const openProject = useCallback((project) => {
+    setSelected(project);
+    setPaused(true);
+    setAutoPlay(false);
+  }, []);
+  const closeProject = useCallback(() => {
+    setSelected(null);
+    setPaused(false);
+  }, []);
 
   const StageInner = (
     <div
@@ -120,7 +129,15 @@ export default function Projects() {
                 opacity,
                 pointerEvents: front > -0.5 ? "auto" : "none",
               }}
-              onClick={() => { if (moved.current < 6) window.open(p.link, "_blank", "noopener,noreferrer"); }}
+              onClick={() => { if (moved.current < 6) openProject(p); }}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  e.preventDefault();
+                  openProject(p);
+                }
+              }}
+              role="button"
+              tabIndex={front > -0.5 ? 0 : -1}
               data-testid={`project-card-${i}`}
             >
               <div
@@ -143,7 +160,7 @@ export default function Projects() {
                   <p className="font-mono-accent text-[9px] tracking-[0.2em] uppercase text-[#6E685B]">{p.kind}</p>
                   <h4 className="font-serif-display text-xl text-[#1B1A16] leading-tight mt-1">{p.name}</h4>
                   <div className="mt-auto flex items-center gap-1 text-[#BF5537] font-mono-accent text-[10px] uppercase tracking-wider">
-                    View <ArrowUpRight className="w-3 h-3" />
+                    Case Study <ArrowUpRight className="w-3 h-3" />
                   </div>
                 </div>
               </div>
@@ -172,7 +189,7 @@ export default function Projects() {
           <h2 className="font-serif-display font-light text-4xl sm:text-5xl lg:text-6xl text-[#1B1A16] leading-tight">
             A rotating gallery of <span className="italic text-[#BF5537]">things I've built</span>.
           </h2>
-          <p className="text-[#6E685B] text-sm mt-4 font-mono-accent tracking-wide">Drag to spin · click a card to visit the project · ⤢ expand</p>
+          <p className="text-[#6E685B] text-sm mt-4 font-mono-accent tracking-wide">Drag to spin · open a case study · ⤢ expand</p>
         </div>
 
         {/* inline stage (fixed height/width feel) */}
@@ -202,37 +219,61 @@ export default function Projects() {
           <motion.div
             initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
             className="fixed inset-0 z-[90] flex items-center justify-center p-6 bg-[#1B1A16]/50 backdrop-blur-sm"
-            onClick={() => setSelected(null)}
+            onClick={closeProject}
             data-testid="project-detail-modal"
           >
             <motion.div
               initial={{ y: 30, scale: 0.96 }} animate={{ y: 0, scale: 1 }} exit={{ y: 20, opacity: 0 }}
               transition={{ type: "spring", damping: 24, stiffness: 260 }}
               onClick={(e) => e.stopPropagation()}
-              className="relative w-full max-w-lg bg-[#F7F4ED] border border-[rgba(27,26,22,0.15)] rounded-2xl overflow-hidden"
+              className="relative max-h-[90vh] w-full max-w-3xl overflow-y-auto bg-[#F7F4ED] border border-[rgba(27,26,22,0.15)] rounded-2xl"
             >
-              <div className="h-44 relative flex items-end p-6 overflow-hidden" style={{ background: `linear-gradient(135deg, ${selected.hue}, ${selected.hue}bb)` }}>
-                {selected.image && <img src={selected.image} alt={selected.name} className="absolute inset-0 w-full h-full object-cover object-top" />}
-                <span className="relative font-serif-display text-white text-3xl drop-shadow-[0_2px_8px_rgba(0,0,0,0.5)]">{selected.name}</span>
-                <button onClick={() => setSelected(null)} data-testid="project-detail-close" className="absolute top-3 right-3 p-2 rounded-full bg-black/30 text-white hover:bg-black/50 z-10">
+              <div className="h-52 relative flex items-end p-6 overflow-hidden" style={{ background: `linear-gradient(135deg, ${selected.hue}, ${selected.hue}bb)` }}>
+                {selected.image && <img src={selected.image} alt={selected.name} className="absolute inset-0 w-full h-full object-cover object-top opacity-90" />}
+                <div className="absolute inset-0 bg-gradient-to-t from-[#1B1A16]/70 via-[#1B1A16]/15 to-transparent" />
+                <div className="relative">
+                  <p className="font-mono-accent text-[10px] tracking-[0.2em] uppercase text-white/80">{selected.kind} · {selected.year}</p>
+                  <span className="font-serif-display text-white text-4xl sm:text-5xl drop-shadow-[0_2px_8px_rgba(0,0,0,0.5)]">{selected.name}</span>
+                </div>
+                <button onClick={closeProject} aria-label="Close case study" data-testid="project-detail-close" className="absolute top-3 right-3 p-2 rounded-full bg-black/30 text-white hover:bg-black/50 z-10">
                   <X className="w-4 h-4" />
                 </button>
               </div>
               <div className="p-6">
-                <p className="font-mono-accent text-[10px] tracking-[0.2em] uppercase text-[#6E685B]">{selected.kind} · {selected.year}</p>
-                <p className="text-[#4a463d] leading-relaxed mt-3">{selected.desc}</p>
+                <p className="text-[#4a463d] leading-relaxed">{selected.desc}</p>
+                <div className="mt-6 grid gap-4 md:grid-cols-3">
+                  {[
+                    ["Challenge", selected.challenge],
+                    ["Solution", selected.solution],
+                    ["Impact", selected.impact],
+                  ].map(([label, value]) => (
+                    <div key={label} className="border border-[rgba(27,26,22,0.12)] bg-[#EFEBE3]/70 p-4">
+                      <p className="font-mono-accent text-[10px] tracking-[0.2em] uppercase text-[#BF5537]">{label}</p>
+                      <p className="mt-3 text-sm leading-relaxed text-[#4a463d]">{value}</p>
+                    </div>
+                  ))}
+                </div>
                 <div className="flex flex-wrap gap-2 mt-5">
                   {selected.stack.map((s) => (
                     <span key={s} className="font-mono-accent text-[10px] text-[#4a463d] border border-[rgba(27,26,22,0.16)] px-2.5 py-1">{s}</span>
                   ))}
                 </div>
-                <a
-                  href={selected.link} target="_blank" rel="noreferrer"
-                  data-testid="project-detail-link"
-                  className="inline-flex items-center gap-2 mt-6 font-mono-accent text-xs tracking-[0.15em] uppercase bg-[#1B1A16] text-[#EFEBE3] px-6 py-3 hover:bg-[#BF5537] transition-colors"
-                >
-                  {selected.live ? <><ExternalLink className="w-4 h-4" /> Visit Site</> : <><Github className="w-4 h-4" /> View Code</>}
-                </a>
+                <div className="mt-6 flex flex-wrap gap-3">
+                  <a
+                    href={selected.link} target="_blank" rel="noreferrer"
+                    data-testid="project-detail-link"
+                    className="inline-flex items-center gap-2 font-mono-accent text-xs tracking-[0.15em] uppercase bg-[#1B1A16] text-[#EFEBE3] px-6 py-3 hover:bg-[#BF5537] transition-colors"
+                  >
+                    {selected.live ? <><ExternalLink className="w-4 h-4" /> Visit Site</> : <><Github className="w-4 h-4" /> View Code</>}
+                  </a>
+                  <button
+                    type="button"
+                    onClick={closeProject}
+                    className="font-mono-accent text-xs tracking-[0.15em] uppercase border border-[rgba(27,26,22,0.25)] px-6 py-3 hover:bg-[#1B1A16] hover:text-[#EFEBE3] transition-colors"
+                  >
+                    Back to Gallery
+                  </button>
+                </div>
               </div>
             </motion.div>
           </motion.div>

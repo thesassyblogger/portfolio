@@ -17,15 +17,25 @@ function scatter(i) {
   return { x: rx * 900, y: ry * 620, rot: rr * 220 };
 }
 
-export default function Preloader({ onDone }) {
+export default function Preloader({ progress = 0, assetsReady = true, reducedMotion = false, onDone }) {
   const [count, setCount] = useState(0);
   const [phase, setPhase] = useState("load"); // load -> lift
   const [gone, setGone] = useState(false);
   const finished = useRef(false);
+  const progressRef = useRef(progress);
+  const assetsReadyRef = useRef(assetsReady);
   const letters = useMemo(() => NAME.split(""), []);
 
   useEffect(() => {
-    const dur = 2000;
+    progressRef.current = progress;
+  }, [progress]);
+
+  useEffect(() => {
+    assetsReadyRef.current = assetsReady;
+  }, [assetsReady]);
+
+  useEffect(() => {
+    const dur = reducedMotion ? 650 : 1800;
     const start = performance.now();
     let raf;
 
@@ -34,19 +44,23 @@ export default function Preloader({ onDone }) {
       finished.current = true;
       setCount(100);
       setPhase("lift");
-      setTimeout(() => { setGone(true); onDone && onDone(); }, 1150);
+      setTimeout(() => { setGone(true); onDone && onDone(); }, reducedMotion ? 420 : 1150);
     };
 
     const tick = (t) => {
-      const p = Math.min((t - start) / dur, 1);
-      setCount(Math.floor(p * 100));
-      if (p < 1) raf = requestAnimationFrame(tick);
-      else setTimeout(lift, 260);
+      const elapsed = t - start;
+      const timed = Math.min(elapsed / dur, 1);
+      const staged = assetsReadyRef.current ? 100 : Math.min(94, 8 + timed * 78);
+      const next = Math.max(staged, progressRef.current);
+      setCount(Math.floor(Math.min(100, next)));
+
+      if (assetsReadyRef.current && elapsed >= dur) setTimeout(lift, reducedMotion ? 80 : 260);
+      else raf = requestAnimationFrame(tick);
     };
     raf = requestAnimationFrame(tick);
-    const cap = setTimeout(lift, dur + 1100);
+    const cap = setTimeout(lift, dur + 5200);
     return () => { cancelAnimationFrame(raf); clearTimeout(cap); };
-  }, [onDone]);
+  }, [onDone, reducedMotion]);
 
   return (
     <AnimatePresence>
@@ -61,10 +75,19 @@ export default function Preloader({ onDone }) {
                 style={{ background: "#EFEBE3" }}
                 initial={{ y: "0%" }}
                 animate={{ y: phase === "lift" ? "-100%" : "0%" }}
-                transition={{ duration: 0.75, delay: phase === "lift" ? i * 0.07 : 0, ease: [0.76, 0, 0.24, 1] }}
+                transition={{ duration: reducedMotion ? 0.24 : 0.75, delay: reducedMotion ? 0 : phase === "lift" ? i * 0.07 : 0, ease: [0.76, 0, 0.24, 1] }}
               />
             ))}
           </div>
+
+          <motion.div
+            className="absolute inset-0 pointer-events-none"
+            animate={{ opacity: phase === "lift" ? 0 : 1 }}
+            style={{
+              background:
+                "radial-gradient(circle at 50% 45%, rgba(191,85,55,0.12), transparent 28%), radial-gradient(circle at 52% 56%, rgba(53,89,78,0.09), transparent 30%)",
+            }}
+          />
 
           {/* content */}
           <motion.div
@@ -88,14 +111,14 @@ export default function Preloader({ onDone }) {
               <div className="absolute inset-0 flex items-center justify-center">
                 <div className="flex">
                   {letters.map((ch, i) => {
-                    const sc = scatter(i + 1);
+                    const sc = reducedMotion ? { x: 0, y: 0, rot: 0 } : scatter(i + 1);
                     return (
                       <motion.span
                         key={i}
                         className={`font-serif-display text-3xl sm:text-4xl ${ch === "P" ? "italic text-[#BF5537]" : "text-[#1B1A16]"}`}
-                        initial={{ x: sc.x, y: sc.y, rotate: sc.rot, opacity: 0, filter: "blur(6px)" }}
+                        initial={{ x: sc.x, y: sc.y, rotate: sc.rot, opacity: 0, filter: reducedMotion ? "blur(0px)" : "blur(6px)" }}
                         animate={{ x: 0, y: 0, rotate: 0, opacity: ch === " " ? 0 : 1, filter: "blur(0px)" }}
-                        transition={{ type: "spring", stiffness: 120, damping: 14, delay: 0.15 + i * 0.06 }}
+                        transition={{ type: "spring", stiffness: 120, damping: 14, delay: reducedMotion ? 0 : 0.15 + i * 0.06 }}
                         style={{ display: "inline-block", width: ch === " " ? "0.5rem" : "auto" }}
                       >
                         {ch === " " ? "\u00A0" : ch}
@@ -117,7 +140,7 @@ export default function Preloader({ onDone }) {
                 animate={{ opacity: [0.4, 1, 0.4] }}
                 transition={{ duration: 1.6, repeat: Infinity }}
               >
-                Curating the experience
+                Loading the 3D signature
               </motion.span>
             </p>
           </motion.div>

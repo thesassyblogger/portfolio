@@ -64,6 +64,17 @@ body.cursor-none input, body.cursor-none textarea { cursor: text !important; }
   100% { transform: translate(0,0) scale(1); }
 }
 
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
 @layer base {
   :root {
     --background: 42 24% 91%;

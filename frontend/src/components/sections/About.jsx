@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { motion, useInView, useScroll, useTransform } from "framer-motion";
 import { PROFILE, CERTS } from "../../data/portfolio";
 
-const headline = "From Mumbai's buzz to Regina's calm — I turn ideas into resilient, beautiful software.";
+const headline = "From Mumbai's buzz to Regina's calm I turn ideas into resilient, beautiful software.";
 const INTERESTS = ["FASHION", "TRAVEL", "SPACE", "DESIGN", "CLOUD", "COFFEE"];
 
 function CountUp({ to, suffix = "" }) {
@@ -67,8 +67,9 @@ export default function About() {
           <motion.div initial={{ scaleX: 0 }} whileInView={{ scaleX: 1 }} viewport={{ once: true }} transition={{ duration: 0.9, delay: 0.4, ease: [0.22, 1, 0.36, 1] }} className="mt-6 h-px w-40 bg-[#BF5537] origin-left" />
 
           <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.3 }} className="mt-8 space-y-5 text-[#4a463d] leading-relaxed">
-            <p>I'm a Full Stack Cloud Engineer who lives at the intersection of solid infrastructure and considered design. {PROFILE.summary}</p>
-            <p>Off the keyboard, I love styling myself and chasing new places — an eye for detail that flows straight back into the way I build products.</p>
+            <p>I'm a University of Regina graduate and Full Stack Cloud Engineer based in Regina. I like building things that are strong behind the scenes and still feel simple, thoughtful, and easy to use on the front end.</p>
+            <p>My work usually sits somewhere between cloud infrastructure, full-stack development, and design details. I care about clean systems, clear interfaces, and products that feel polished without feeling overdone.</p>
+            <p>Outside of work, I love styling myself, exploring new places, and noticing the small details around me. That same eye for detail shows up in the way I design, debug, and build.</p>
           </motion.div>
 
           {/* animated count-up stats with hover accent */}
