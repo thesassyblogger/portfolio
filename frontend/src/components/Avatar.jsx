@@ -6,8 +6,9 @@ import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import { DRACOLoader } from "three/examples/jsm/loaders/DRACOLoader";
 import { MeshoptDecoder } from "three/examples/jsm/libs/meshopt_decoder.module";
 import { clone as cloneSkeleton } from "three/examples/jsm/utils/SkeletonUtils";
+import { publicPath } from "../lib/publicPath";
 
-const MODEL_URL = "/models/mansi-power-suit.draco.glb";
+const MODEL_URL = publicPath("/models/mansi-power-suit.draco.glb");
 
 const STATES = {
   Home: {
@@ -116,7 +117,7 @@ function useMouseTarget(enabled = true) {
 
 function configureLoader(loader) {
   const dracoLoader = new DRACOLoader();
-  dracoLoader.setDecoderPath("/draco/");
+  dracoLoader.setDecoderPath(publicPath("/draco/"));
   loader.setDRACOLoader(dracoLoader);
   loader.setMeshoptDecoder(MeshoptDecoder);
 }

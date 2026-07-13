@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
+import { publicPath } from "../lib/publicPath";
 
-const CRITICAL_ASSETS = ["/models/mansi-power-suit.draco.glb"];
+const CRITICAL_ASSETS = [publicPath("/models/mansi-power-suit.draco.glb")];
 
 function loadAsset(url, onProgress) {
   return new Promise((resolve) => {

@@ -1,9 +1,11 @@
 // Portfolio content for Mansi Patel — neutral editorial theme
+import { publicPath } from "../lib/publicPath";
+
 export const AVATARS = {
-  hero: "/avatars/hero.png",
-  wave: "/avatars/pose_wave.png",
-  arms: "/avatars/pose_arms.png",
-  present: "/avatars/pose_present.png",
+  hero: publicPath("/avatars/hero.png"),
+  wave: publicPath("/avatars/pose_wave.png"),
+  arms: publicPath("/avatars/pose_arms.png"),
+  present: publicPath("/avatars/pose_present.png"),
 };
 
 export const PROFILE = {
@@ -82,7 +84,7 @@ export const PROJECTS = [
     impact: "Shows front-end taste, spacing discipline, and the ability to turn a simple concept into a polished web experience.",
     link: "https://thesassyblogger.github.io/Mango/",
     live: true,
-    image: "/projects/mango.jpg",
+    image: publicPath("/projects/mango.jpg"),
     hue: "#BF5537",
   },
   {
@@ -96,7 +98,7 @@ export const PROJECTS = [
     impact: "Demonstrates visual judgment, responsive implementation, and attention to small interaction details.",
     link: "https://thesassyblogger.github.io/sunflower/",
     live: true,
-    image: "/projects/sunflower.jpg",
+    image: publicPath("/projects/sunflower.jpg"),
     hue: "#C9922E",
   },
   {
@@ -110,7 +112,7 @@ export const PROJECTS = [
     impact: "Proves comfort with event-driven backends, deployment workflow, and production-minded cloud setup.",
     link: "https://github.com/thesassyblogger/webst",
     live: false,
-    image: "/projects/chat.jpg",
+    image: publicPath("/projects/chat.jpg"),
     hue: "#35594E",
   },
   {
@@ -124,7 +126,7 @@ export const PROJECTS = [
     impact: "Highlights full-stack product thinking: authentication, data modeling, UI workflows, and reporting.",
     link: "https://thesassyblogger.github.io/Mern-Task-Manager/#/login",
     live: true,
-    image: "/projects/task.jpg",
+    image: publicPath("/projects/task.jpg"),
     hue: "#4A5A7A",
   },
   {
@@ -138,7 +140,7 @@ export const PROJECTS = [
     impact: "Signals DevOps maturity: automation, environment consistency, and release reliability.",
     link: "https://github.com/thesassyblogger/node-todo-cicd",
     live: false,
-    image: "/projects/aws.jpg",
+    image: publicPath("/projects/aws.jpg"),
     hue: "#7A4A5A",
   },
   {
@@ -152,7 +154,7 @@ export const PROJECTS = [
     impact: "Shows cloud engineering depth across infrastructure, Kubernetes, security, and operational visibility.",
     link: "https://github.com/thesassyblogger/DevopsProject2",
     live: false,
-    image: "/projects/pipeline.jpg",
+    image: publicPath("/projects/pipeline.jpg"),
     hue: "#3E6B57",
   },
 ];

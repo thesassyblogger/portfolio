@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { NAV, PROFILE } from "../data/portfolio";
+import { publicPath } from "../lib/publicPath";
 
 export default function Navbar({ active }) {
   const [open, setOpen] = useState(false);
@@ -19,6 +20,7 @@ export default function Navbar({ active }) {
 
   const actionClass =
     "inline-flex font-mono-accent text-xs tracking-[0.15em] uppercase border border-[rgba(27,26,22,0.3)] px-3 lg:px-4 py-2 hover:bg-[#1B1A16] hover:text-[#EFEBE3] transition-colors";
+  const resumeUrl = publicPath("/mansi-patel-resume.pdf");
 
   return (
     <motion.nav
@@ -51,7 +53,7 @@ export default function Navbar({ active }) {
         </div>
 
         <div className="hidden md:flex items-center gap-2 lg:gap-3">
-          <a href="/mansi-patel-resume.pdf" download data-testid="nav-resume-cta" className="inline-flex items-center font-mono-accent text-xs tracking-[0.15em] uppercase bg-[#BF5537] text-[#F7F4ED] px-3 lg:px-4 py-2 hover:bg-[#1B1A16] transition-colors">
+          <a href={resumeUrl} download data-testid="nav-resume-cta" className="inline-flex items-center font-mono-accent text-xs tracking-[0.15em] uppercase bg-[#BF5537] text-[#F7F4ED] px-3 lg:px-4 py-2 hover:bg-[#1B1A16] transition-colors">
             R&eacute;sum&eacute;
           </a>
           <a href={PROFILE.linkedin} target="_blank" rel="noreferrer" data-testid="nav-linkedin-cta" className={actionClass}>
@@ -75,7 +77,7 @@ export default function Navbar({ active }) {
                 {item}
               </button>
             ))}
-            <a href="/mansi-patel-resume.pdf" download data-testid="nav-mobile-resume-cta" className="font-mono-accent text-left text-sm tracking-[0.15em] uppercase text-[#BF5537]">
+            <a href={resumeUrl} download data-testid="nav-mobile-resume-cta" className="font-mono-accent text-left text-sm tracking-[0.15em] uppercase text-[#BF5537]">
               Download R&eacute;sum&eacute; &darr;
             </a>
             <a href={PROFILE.linkedin} target="_blank" rel="noreferrer" data-testid="nav-mobile-linkedin-cta" className="font-mono-accent text-left text-sm tracking-[0.15em] uppercase text-[#1B1A16] hover:text-[#BF5537]">
