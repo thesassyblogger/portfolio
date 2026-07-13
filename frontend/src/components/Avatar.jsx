@@ -17,8 +17,8 @@ const STATES = {
     secondary: "#35594E",
     opacity: 1,
     scale: 1.1,
-    frame: { height: "94vh", width: "68vw", maxWidth: 1040 },
-    scene: { rotY: 0, rotX: -0.045, z: 0.24, y: -2.78, modelScale: 3.55, follow: 0.22, lift: 0.07 },
+    frame: { height: "94vh", width: "54vw", maxWidth: 820 },
+    scene: { rotY: 0, rotX: -0.045, z: 0.22, y: -0.05, modelScale: 1.08, follow: 0.16, lift: 0.07 },
     glyph: "arrival",
   },
   About: {
@@ -423,8 +423,6 @@ export default function Avatar({ active, ready = true, reducedMotion = false }) 
   const state = STATES[active] || STATES.Home;
   const side = state.side;
   const isCenter = side === "center";
-  const sceneAspect = active === "Home" ? "3 / 4" : "366 / 1099";
-  const homeBustMask = "linear-gradient(to bottom, #000 0%, #000 66%, rgba(0,0,0,0.78) 75%, transparent 90%)";
   const wrapRef = useRef(null);
   const mouseRef = useMouseTarget(!reducedMotion);
   const [entered, setEntered] = useState(false);
@@ -481,14 +479,7 @@ export default function Avatar({ active, ready = true, reducedMotion = false }) 
               style={{ background: `radial-gradient(circle, ${state.accent}22, transparent 64%)` }}
             />
 
-            <div
-              className="absolute bottom-0 left-1/2 -translate-x-1/2 h-full"
-              style={{
-                aspectRatio: sceneAspect,
-                WebkitMaskImage: active === "Home" ? homeBustMask : undefined,
-                maskImage: active === "Home" ? homeBustMask : undefined,
-              }}
-            >
+            <div className="absolute bottom-0 left-1/2 -translate-x-1/2 h-full" style={{ aspectRatio: "366 / 1099" }}>
               <AnimatePresence mode="sync">
                 <motion.div
                   key="mansi-3d-avatar"

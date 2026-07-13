@@ -17,6 +17,9 @@ export default function Navbar({ active }) {
     document.getElementById(id.toLowerCase())?.scrollIntoView({ behavior: "smooth" });
   };
 
+  const actionClass =
+    "inline-flex font-mono-accent text-xs tracking-[0.15em] uppercase border border-[rgba(27,26,22,0.3)] px-3 lg:px-4 py-2 hover:bg-[#1B1A16] hover:text-[#EFEBE3] transition-colors";
+
   return (
     <motion.nav
       initial={{ y: -60, opacity: 0 }}
@@ -32,7 +35,7 @@ export default function Navbar({ active }) {
           Mansi<span className="text-[#BF5537]">.</span>
         </button>
 
-        <div className="hidden md:flex items-center gap-7">
+        <div className="hidden md:flex items-center gap-5 lg:gap-7">
           {NAV.map((item) => (
             <button
               key={item}
@@ -47,11 +50,14 @@ export default function Navbar({ active }) {
           ))}
         </div>
 
-        <div className="hidden md:flex items-center gap-3">
-          <a href="/mansi-patel-resume.pdf" download data-testid="nav-resume-cta" className="inline-flex items-center font-mono-accent text-xs tracking-[0.15em] uppercase bg-[#BF5537] text-[#F7F4ED] px-4 py-2 hover:bg-[#1B1A16] transition-colors">
-            Résumé
+        <div className="hidden md:flex items-center gap-2 lg:gap-3">
+          <a href="/mansi-patel-resume.pdf" download data-testid="nav-resume-cta" className="inline-flex items-center font-mono-accent text-xs tracking-[0.15em] uppercase bg-[#BF5537] text-[#F7F4ED] px-3 lg:px-4 py-2 hover:bg-[#1B1A16] transition-colors">
+            R&eacute;sum&eacute;
           </a>
-          <a href={PROFILE.github} target="_blank" rel="noreferrer" data-testid="nav-github-cta" className="inline-flex font-mono-accent text-xs tracking-[0.15em] uppercase border border-[rgba(27,26,22,0.3)] px-4 py-2 hover:bg-[#1B1A16] hover:text-[#EFEBE3] transition-colors">
+          <a href={PROFILE.linkedin} target="_blank" rel="noreferrer" data-testid="nav-linkedin-cta" className={actionClass}>
+            LinkedIn
+          </a>
+          <a href={PROFILE.github} target="_blank" rel="noreferrer" data-testid="nav-github-cta" className={actionClass}>
             GitHub
           </a>
         </div>
@@ -70,7 +76,13 @@ export default function Navbar({ active }) {
               </button>
             ))}
             <a href="/mansi-patel-resume.pdf" download data-testid="nav-mobile-resume-cta" className="font-mono-accent text-left text-sm tracking-[0.15em] uppercase text-[#BF5537]">
-              Download Résumé ↓
+              Download R&eacute;sum&eacute; &darr;
+            </a>
+            <a href={PROFILE.linkedin} target="_blank" rel="noreferrer" data-testid="nav-mobile-linkedin-cta" className="font-mono-accent text-left text-sm tracking-[0.15em] uppercase text-[#1B1A16] hover:text-[#BF5537]">
+              LinkedIn
+            </a>
+            <a href={PROFILE.github} target="_blank" rel="noreferrer" data-testid="nav-mobile-github-cta" className="font-mono-accent text-left text-sm tracking-[0.15em] uppercase text-[#1B1A16] hover:text-[#BF5537]">
+              GitHub
             </a>
           </div>
         </motion.div>
