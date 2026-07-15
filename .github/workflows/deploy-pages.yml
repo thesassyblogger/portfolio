@@ -39,7 +39,7 @@ jobs:
         run: npm run build
         env:
           CI: false
-          PUBLIC_URL: /portfolio
+          PUBLIC_URL: /
 
       - name: Configure Pages
         uses: actions/configure-pages@v5
