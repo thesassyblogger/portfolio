@@ -10,8 +10,7 @@ import { PROFILE } from "../../data/portfolio";
 
 gsap.registerPlugin(ScrollTrigger, MotionPathPlugin);
 
-const CONTACT_EMAIL = "mansip140904@gmail.com";
-const CONTACT_ENDPOINT = `https://formsubmit.co/ajax/${CONTACT_EMAIL}`;
+const CONTACT_ENDPOINT = "https://formsubmit.co/ajax/bfc5c755b33ac9eafadda243b7e7fdbd";
 const AIRPLANE_PATH =
   "M36 500 C6 414 62 338 174 320 C306 298 396 394 354 494 C314 588 166 574 104 486 C42 396 116 300 244 304 C382 310 430 514 560 520";
 
@@ -157,8 +156,7 @@ export default function Contact() {
         CONTACT_ENDPOINT,
         {
           name: form.name,
-          email: form.email,
-          _replyto: form.email,
+          visitor_email: form.email,
           subject: form.subject || "Portfolio contact form",
           message: form.message,
           _subject: form.subject
