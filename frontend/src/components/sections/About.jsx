@@ -5,22 +5,29 @@ import { PROFILE, CERTS } from "../../data/portfolio";
 const headline = "From Mumbai's buzz to Regina's calm I turn ideas into resilient, beautiful software.";
 const INTERESTS = ["FASHION", "TRAVEL", "SPACE", "DESIGN", "CLOUD", "COFFEE"];
 
-function CountUp({ to, suffix = "" }) {
-  const ref = useRef(null);
-  const inView = useInView(ref, { once: true, margin: "-20%" });
-  const [n, setN] = useState(0);
+function CountUp({ to, suffix = "", start = false }) {
+  const [n, setN] = useState(() => (to > 0 ? 1 : 0));
+
   useEffect(() => {
-    if (!inView) return;
-    let raf; const start = performance.now(); const dur = 1200;
+    if (!start) return undefined;
+
+    let raf;
+    const startedAt = performance.now();
+    const dur = 1200;
+    setN(to > 0 ? 1 : 0);
     const tick = (t) => {
-      const p = Math.min((t - start) / dur, 1);
-      setN(Math.floor(p * to));
+      const p = Math.min((t - startedAt) / dur, 1);
+      const eased = 1 - Math.pow(1 - p, 3);
+      setN(to > 0 ? Math.max(1, Math.round(eased * to)) : 0);
       if (p < 1) raf = requestAnimationFrame(tick);
     };
     raf = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(raf);
-  }, [inView, to]);
-  return <span ref={ref}>{n}{suffix}</span>;
+    return () => {
+      if (raf) cancelAnimationFrame(raf);
+    };
+  }, [start, to]);
+
+  return <span>{n}{suffix}</span>;
 }
 
 export default function About() {
@@ -30,6 +37,8 @@ export default function About() {
   const markY = useTransform(scrollYProgress, [0, 1], [120, -120]);
   const markRot = useTransform(scrollYProgress, [0, 1], [90, 96]);
   const sealRot = useTransform(scrollYProgress, [0, 1], [0, 180]);
+  const statsRef = useRef(null);
+  const statsInView = useInView(statsRef, { once: true, margin: "0px 0px 28% 0px" });
 
   return (
     <section id="about" data-testid="about-section" ref={ref} className="relative py-28 lg:py-40 overflow-hidden">
@@ -73,14 +82,14 @@ export default function About() {
           </motion.div>
 
           {/* animated count-up stats with hover accent */}
-          <div className="mt-10 grid grid-cols-3 gap-6 border-y border-[rgba(27,26,22,0.14)] py-6">
+          <div ref={statsRef} className="mt-10 grid grid-cols-3 gap-6 border-y border-[rgba(27,26,22,0.14)] py-6">
             {[
               { v: 15, s: "+", k: "Projects shipped" },
               { v: 5, s: "+", k: "Certifications" },
               { v: 2, s: "", k: "Countries lived" },
             ].map((st, i) => (
               <motion.div key={st.k} initial={{ opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.15 + i * 0.1 }} whileHover={{ y: -4 }} data-cursor="hover" className="group">
-                <p className="font-serif-display text-4xl sm:text-5xl text-[#1B1A16] group-hover:text-[#BF5537] transition-colors"><CountUp to={st.v} suffix={st.s} /></p>
+                <p className="font-serif-display text-4xl sm:text-5xl text-[#1B1A16] group-hover:text-[#BF5537] transition-colors"><CountUp to={st.v} suffix={st.s} start={statsInView} /></p>
                 <p className="font-mono-accent text-[10px] tracking-[0.15em] uppercase text-[#6E685B] mt-1">{st.k}</p>
                 <span className="block mt-2 h-px w-0 group-hover:w-full bg-[#BF5537] transition-all duration-500" />
               </motion.div>
