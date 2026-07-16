@@ -6,7 +6,7 @@ const headline = "From Mumbai's buzz to Regina's calm I turn ideas into resilien
 const INTERESTS = ["FASHION", "TRAVEL", "SPACE", "DESIGN", "CLOUD", "COFFEE"];
 
 function CountUp({ to, suffix = "", start = false }) {
-  const [n, setN] = useState(() => (to > 0 ? 1 : 0));
+  const [n, setN] = useState(0);
 
   useEffect(() => {
     if (!start) return undefined;
@@ -14,11 +14,11 @@ function CountUp({ to, suffix = "", start = false }) {
     let raf;
     const startedAt = performance.now();
     const dur = 1200;
-    setN(to > 0 ? 1 : 0);
+    setN(0);
     const tick = (t) => {
       const p = Math.min((t - startedAt) / dur, 1);
       const eased = 1 - Math.pow(1 - p, 3);
-      setN(to > 0 ? Math.max(1, Math.round(eased * to)) : 0);
+      setN(Math.round(eased * to));
       if (p < 1) raf = requestAnimationFrame(tick);
     };
     raf = requestAnimationFrame(tick);
@@ -38,7 +38,7 @@ export default function About() {
   const markRot = useTransform(scrollYProgress, [0, 1], [90, 96]);
   const sealRot = useTransform(scrollYProgress, [0, 1], [0, 180]);
   const statsRef = useRef(null);
-  const statsInView = useInView(statsRef, { once: true, margin: "0px 0px 28% 0px" });
+  const statsInView = useInView(statsRef, { once: true, margin: "0px 0px 42% 0px" });
 
   return (
     <section id="about" data-testid="about-section" ref={ref} className="relative py-28 lg:py-40 overflow-hidden">
